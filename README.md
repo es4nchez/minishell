@@ -12,3 +12,10 @@ Idée de Workflow ( à modifier ) :
 * -> si 1) on execute la commande normal pépère
 * -> si 2) on fork le process pour pouvoir retourner au shell après l'exécution
 * -> back to beginning
+
+To do :
+
+* Makefile
+* Les pipes
+* Du parsing propre
+* So much more
