@@ -23,6 +23,6 @@ void	handle_input(char *input, char **argv, char **envp)
 	if (ft_strncmp(input, "echo -n", 4) == 0)
 			printf("%s\n", ft_substr(input, 7, ft_strlen(input)));
 	if (ft_strncmp(input, "ls", 2) == 0)
-			execve("/bin/ls", argv, envp);
+			execve_threading("/bin/ls", argv, envp);
 	return ;
 }
