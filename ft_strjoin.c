@@ -1,38 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/24 13:45:17 by esanchez          #+#    #+#             */
-/*   Updated: 2022/01/24 13:45:20 by esanchez         ###   ########.fr       */
+/*   Created: 2021/10/11 17:03:46 by esanchez          #+#    #+#             */
+/*   Updated: 2021/10/11 17:03:48 by esanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int main(int argc, char **argv, char **envp)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*input;
 	int		i;
+	int		j;
+	char	*tmp;
 
-	(void)argc;
 	i = 0;
-/*
-	printf("\n");
-	while (envp[i])
+	j = 0;
+	if (!s1 || !s2)
+		return (NULL);
+	tmp = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!tmp)
+		return (NULL);
+	while (s1[i] != '\0')
 	{
-		printf("%s\n", envp[i]);
+		tmp[i] = s1[i];
 		i++;
 	}
-	printf("\n");
-*/
-	signal(SIGINT, handle_ctrl);
-	while (1)
+	while (s2[j] != '\0')
 	{
-		input = take_input();
-		handle_input(input, argv, envp);
+		tmp[i] = s2[j];
+		i++;
+		j++;
 	}
-	return (0);
+	tmp[i] = '\0';
+	return (tmp);
 }

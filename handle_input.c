@@ -14,6 +14,9 @@
 
 void	handle_input(char *input, char **argv, char **envp)
 {
+	char	*cmd;
+
+	cmd = ft_strjoin("/bin/", input);
 	if (ft_strncmp(input, "cd ", 3) == 0)
 		chdir(ft_substr(input, 3, ft_strlen(input)));
 	if (ft_strncmp(input, "exit", 4) == 0)
@@ -22,9 +25,12 @@ void	handle_input(char *input, char **argv, char **envp)
 		printf("%s\n", dir_name());
 	if (ft_strncmp(input, "echo -n", 4) == 0)
 		printf("%s\n", ft_substr(input, 7, ft_strlen(input)));
-	if (ft_strncmp(input, "ls", 2) == 0)
-		execve_threading("/bin/ls", argv, envp);
 	if (ft_strncmp(input, "env", 3) == 0)
 		print_env(envp);
+	else
+	{
+		printf("cmd : %s\n", cmd);
+		execve_threading(cmd, argv, envp);
+	}
 	return ;
 }
