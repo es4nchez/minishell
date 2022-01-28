@@ -23,10 +23,16 @@
 # include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <signal.h>
+
+typedef void (*sighandler_t)(int);
+
+sighandler_t signal(int signum, sighandler_t handler);
 
 char	*dir_name(void);
 char	*take_input(void);
 void	handle_input(char *input, char **argv, char **envp);
+void	handle_ctrl(int sig_nb);
 void	execve_threading(char *cmd, char **argv, char **envp);
 void	print_env(char **envp);
 char	*ft_substr(char const *s, unsigned int start, size_t len);

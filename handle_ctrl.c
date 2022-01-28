@@ -1,40 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   handle_ctrl.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/24 13:45:17 by esanchez          #+#    #+#             */
-/*   Updated: 2022/01/24 13:45:20 by esanchez         ###   ########.fr       */
+/*   Created: 2022/01/28 16:54:20 by esanchez          #+#    #+#             */
+/*   Updated: 2022/01/28 16:54:21 by esanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int main(int argc, char **argv, char **envp)
+void	handle_ctrl(int	sig_nb)
 {
-	char	*input;
-	int		i;
-
-	(void)argc;
-	(void)argv;
-	(void)envp;
-	i = 0;
-/*
-	printf("\n");
-	while (envp[i])
+	if (sig_nb == 20)
+		exit (0);
+	else if (sig_nb == 2)
 	{
-		printf("%s\n", envp[i]);
-		i++;
+		printf("\n");
+		return ;
 	}
-	printf("\n");
-*/
-	signal(SIGINT, handle_ctrl);
-	while (1)
-	{
-		input = take_input();
-		handle_input(input, argv, envp);
-	}
-	return (0);
+	return ;
 }
