@@ -15,14 +15,16 @@
 void	handle_input(char *input, char **argv, char **envp)
 {
 	if (ft_strncmp(input, "cd ", 3) == 0)
-			chdir(ft_substr(input, 3, ft_strlen(input)));
+		chdir(ft_substr(input, 3, ft_strlen(input)));
 	if (ft_strncmp(input, "exit", 4) == 0)
-			exit(0);
+		exit(0);
 	if (ft_strncmp(input, "pwd", 3) == 0)
-			printf("%s\n", dir_name());
+		printf("%s\n", dir_name());
 	if (ft_strncmp(input, "echo -n", 4) == 0)
-			printf("%s\n", ft_substr(input, 7, ft_strlen(input)));
+		printf("%s\n", ft_substr(input, 7, ft_strlen(input)));
 	if (ft_strncmp(input, "ls", 2) == 0)
-			execve_threading("/bin/ls", argv, envp);
+		execve_threading("/bin/ls", argv, envp);
+	if (ft_strncmp(input, "env", 3) == 0)
+		print_env(envp);
 	return ;
 }

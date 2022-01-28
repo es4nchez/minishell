@@ -14,8 +14,8 @@
 
 void	execve_threading(char *cmd, char **argv, char **envp)
 {
-	pid_t pid;
-	int	status;
+	pid_t	pid;
+	int		status;
 
 	pid = fork();
 	if (pid == -1)

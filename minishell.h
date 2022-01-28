@@ -24,10 +24,11 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-char	*dir_name();
-char	*take_input();
+char	*dir_name(void);
+char	*take_input(void);
 void	handle_input(char *input, char **argv, char **envp);
 void	execve_threading(char *cmd, char **argv, char **envp);
+void	print_env(char **envp);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 size_t	ft_strlen(const char *s);

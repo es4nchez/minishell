@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-char	*take_input()
+char	*take_input(void)
 {
 	char	*input;
 

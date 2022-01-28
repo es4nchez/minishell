@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-char	*dir_name()
+char	*dir_name(void)
 {
 	char	*dir_name;
 
@@ -20,4 +20,3 @@ char	*dir_name()
 	dir_name = getcwd(dir_name, 0);
 	return (dir_name);
 }
-

@@ -1,20 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   forking.c                                          :+:      :+:    :+:   */
+/*   env_function.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/26 15:35:26 by esanchez          #+#    #+#             */
-/*   Updated: 2022/01/26 15:35:28 by esanchez         ###   ########.fr       */
+/*   Created: 2022/01/28 16:21:23 by esanchez          #+#    #+#             */
+/*   Updated: 2022/01/28 16:21:25 by esanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	fork_process(void)
+void	print_env(char **envp)
 {
-	pid_t	pid;
+	int	i;
 
-	pid = fork();
+	i = 0;
+	while (envp[i])
+	{
+		printf("%s\n", envp[i]);
+		i++;
+	}
+	return ;
 }
