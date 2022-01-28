@@ -16,6 +16,7 @@ Idée de Workflow ( à modifier ) :
 To do :
 
 * Makefile
+* Les ctrl+c / ctrl+z etc..
 * Les pipes
 * Du parsing propre
 * So much more
