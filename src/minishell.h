@@ -6,13 +6,14 @@
 /*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 13:45:26 by esanchez          #+#    #+#             */
-/*   Updated: 2022/01/24 13:45:28 by esanchez         ###   ########.fr       */
+/*   Updated: 2022/01/29 12:44:35 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "libft/libft.h"
 # include <string.h>
 # include <stdio.h>
 # include <unistd.h>

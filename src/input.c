@@ -1,39 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/11 17:05:40 by esanchez          #+#    #+#             */
-/*   Updated: 2021/10/11 17:05:42 by esanchez         ###   ########.fr       */
+/*   Created: 2022/01/24 19:48:02 by esanchez          #+#    #+#             */
+/*   Updated: 2022/01/29 15:03:23 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*take_input(void)
 {
-	size_t	i;
-	size_t	j;
-	char	*tmp;
+	char	*input;
 
-	i = 0;
-	j = 0;
-	if (!s)
-		return (NULL);
-	tmp = (char *)malloc(sizeof(*s) * (len + 1));
-	if (!tmp)
-		return (NULL);
-	while (s[i])
-	{
-		if (len > j && start <= i)
-		{
-			tmp[j] = s[i];
-			j++;
-		}
-		i++;
-	}
-	tmp[j] = '\0';
-	return (tmp);
+	input = NULL;
+	input = readline("\e[36mmishellout-0.4.2$ \e[0m");
+	return (input);
 }
