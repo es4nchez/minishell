@@ -1,22 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input.c                                            :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*   By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/24 19:48:02 by esanchez          #+#    #+#             */
-/*   Updated: 2022/01/24 19:48:03 by esanchez         ###   ########.fr       */
+/*   Created: 2021/10/13 04:43:54 by yalthaus          #+#    #+#             */
+/*   Updated: 2021/10/16 05:51:29 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-char	*take_input(void)
+void	ft_putstr_fd(char *s, int fd)
 {
-	char	*input;
+	int	i;
 
-	input = NULL;
-	input = readline("\e[36mmishellout-0.4.2$ \e[0m");
-	return (input);
+	i = 0;
+	if (!s || !fd)
+		return ;
+	while (*(s + i))
+		ft_putchar_fd(s[i++], fd);
 }

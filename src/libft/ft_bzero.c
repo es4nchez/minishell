@@ -1,22 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dir_name.c                                         :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*   By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/24 15:32:46 by esanchez          #+#    #+#             */
-/*   Updated: 2022/01/24 15:32:49 by esanchez         ###   ########.fr       */
+/*   Created: 2021/10/13 00:49:47 by yalthaus          #+#    #+#             */
+/*   Updated: 2021/10/13 00:49:51 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-char	*dir_name(void)
+void	ft_bzero(void *s, size_t n)
 {
-	char	*dir_name;
-
-	dir_name = NULL;
-	dir_name = getcwd(dir_name, 0);
-	return (dir_name);
+	while (n--)
+		*(char *)(s++) = 0;
 }
