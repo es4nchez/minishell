@@ -12,25 +12,30 @@
 
 #include "minishell.h"
 
-void	handle_input(char *input, char **argv, char **envp)
+void	handle_input(char *input, char **envp)
 {
-	char	*cmd;
+	char	**cmd;
+	char	*final_cmd;
 
-	cmd = ft_strjoin("/bin/", input);
+	cmd = ft_split(input, ' ');
+	final_cmd = ft_strjoin("/bin/", cmd[0]);
 	if (ft_strncmp(input, "cd ", 3) == 0)
 		chdir(ft_substr(input, 3, ft_strlen(input)));
-	if (ft_strncmp(input, "exit", 4) == 0)
+	else if (ft_strncmp(input, "exit", 4) == 0)
 		exit(0);
-	if (ft_strncmp(input, "pwd", 3) == 0)
+	else if (ft_strncmp(input, "pwd", 3) == 0)
 		printf("%s\n", dir_name());
-	if (ft_strncmp(input, "echo -n", 4) == 0)
-		printf("%s\n", ft_substr(input, 7, ft_strlen(input)));
-	if (ft_strncmp(input, "env", 3) == 0)
+	else if (ft_strncmp(input, "echo -n", 7) == 0)
+		printf("%s\e[7m%%\e[0m\n", ft_substr(input, 8, ft_strlen(input)));
+	else if (ft_strncmp(input, "echo", 4) == 0 )
+		printf("%s\n", ft_substr(input, 6, ft_strlen(input)));
+	else if (ft_strncmp(input, "env", 3) == 0)
 		print_env(envp);
+	else if (ft_strncmp(input, "export", 6) == 0)
+		export_env(&envp, cmd[1]);
+	else if (ft_strncmp(input, "unset", 5) == 0)
+		unset_env(&envp, cmd[1]);
 	else
-	{
-		printf("cmd : %s\n", cmd);
-		execve_threading(cmd, argv, envp);
-	}
+		execve_threading(final_cmd, cmd, envp);
 	return ;
 }

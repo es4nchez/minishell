@@ -12,20 +12,43 @@
 
 #include "minishell.h"
 
+int	cmd_exist(char *cmd)
+{
+	char	*bin;
+	struct stat	buff;
+
+	bin = ft_strjoin("/bin/", cmd);
+	if (stat(bin, &buff) == -1)
+		return (0);
+	else
+		return (1);
+}
+
+void	cmd_not_found(char *cmd)
+{
+	printf("mishellout: command not found: %s\n", cmd);
+}
+
 void	execve_threading(char *cmd, char **argv, char **envp)
 {
 	pid_t	pid;
 	int		status;
 
+	if (cmd_exist(argv[0]) == 0)
+	{
+		cmd_not_found(argv[0]);
+		return ;
+	}
 	pid = fork();
 	if (pid == -1)
 	{
-		printf("Error1");
+		printf("Forking Error\n");
 		return ;
 	}
 	else if (pid == 0)
 	{
-		execve(cmd, argv, envp);
+		printf("\e[31mcmd :\e[32m %s %s\e[0m\n", cmd, argv[1]);
+		execve(cmd, &argv[0], envp);
 		return ;
 	}
 	else

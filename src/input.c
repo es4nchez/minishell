@@ -17,6 +17,6 @@ char	*take_input(void)
 	char	*input;
 
 	input = NULL;
-	input = readline("\e[36mmishellout-0.4.2$ \e[0m");
+	input = readline("\e[34mmishellout-0.4.2$ \e[0m");
 	return (input);
 }

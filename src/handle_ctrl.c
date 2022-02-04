@@ -14,12 +14,10 @@
 
 void	handle_ctrl(int	sig_nb)
 {
+	printf("signal nb : %d", sig_nb);
 	if (sig_nb == 20)
 		exit (0);
 	else if (sig_nb == 2)
-	{
 		printf("\n");
-		return ;
-	}
 	return ;
 }

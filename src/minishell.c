@@ -17,6 +17,7 @@ int main(int argc, char **argv, char **envp)
 	char	*input;
 	int		i;
 
+	(void)argv;
 	(void)argc;
 	i = 0;
 /*
@@ -32,7 +33,11 @@ int main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		input = take_input();
-		handle_input(input, argv, envp);
+		add_history(input);
+		if (ft_strncmp(input, "", 1) == 0)
+			continue ;
+		else
+			handle_input(input, envp);
 	}
 	return (0);
 }
