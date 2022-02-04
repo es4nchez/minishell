@@ -6,7 +6,7 @@
 /*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 13:45:26 by esanchez          #+#    #+#             */
-/*   Updated: 2022/01/29 12:44:35 by yalthaus         ###   ########.fr       */
+/*   Updated: 2022/02/04 15:39:16 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <time.h>
+# include <termios.h>
 
 /*
 typedef struct s_stat {

@@ -6,11 +6,20 @@
 /*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 13:45:17 by esanchez          #+#    #+#             */
-/*   Updated: 2022/01/24 13:45:20 by esanchez         ###   ########.fr       */
+/*   Updated: 2022/02/04 16:20:41 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	ft_set_termios(void)
+{
+	struct termios temp;
+
+	tcgetattr(STDIN_FILENO, &temp);
+	temp.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSADRAIN, &temp);
+}
 
 int main(int argc, char **argv, char **envp)
 {
@@ -29,7 +38,10 @@ int main(int argc, char **argv, char **envp)
 	}
 	printf("\n");
 */
+
+	signal(SIGQUIT, handle_ctrl);
 	signal(SIGINT, handle_ctrl);
+	ft_set_termios();
 	while (1)
 	{
 		input = take_input();

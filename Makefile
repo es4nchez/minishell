@@ -6,7 +6,7 @@
 #    By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/29 12:23:24 by yalthaus          #+#    #+#              #
-#    Updated: 2022/01/29 19:06:12 by yalthaus         ###   ########.fr        #
+#    Updated: 2022/02/04 14:35:19 by yalthaus         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,6 @@ SRC_FILES		= minishell.c\
 				  dir_name.c\
 				  env_function.c\
 				  execve_threading.c\
-				  forking.c\
 				  input.c\
 				  handle_ctrl.c\
 				  handle_input.c
