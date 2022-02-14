@@ -49,9 +49,11 @@ typedef struct s_stat {
 }	t_stat;
 */
 typedef void (*sighandler_t)(int);
+typedef char *(*pars_func)(char *);
 
 sighandler_t signal(int signum, sighandler_t handler);
 
+char    *pars(char **str, char c, pars_func *pt);
 char	*dir_name(void);
 char	*take_input(void);
 void	handle_input(char *input, char **envp);

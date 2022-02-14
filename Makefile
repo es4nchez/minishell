@@ -59,7 +59,7 @@ $(LIBFT):
 			$(MAKE) $(LIBFTDIR)
 
 $(NAME): $(BUILDDIR) $(LIBFT) $(OBJS) $(DEBUG_FILE)
-			$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBFT)
+			$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBFT) -lreadline
 clean:
 			rm -rf $(BUILDDIR)
 			$(MAKE) $(LIBFTDIR) clean
