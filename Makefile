@@ -37,7 +37,7 @@ OBJS	= $(addprefix $(BUILDDIR), $(SRCNAMES:.c=.o))
 
 # Action
 
-all: padebug $(BUILDDIR) $(LIBFT) $(NAME)
+all: padebug $(NAME)
 
 padebug:
 ifneq ($(JPP),0)
@@ -50,15 +50,15 @@ ifneq ($(JPP),1)
 endif
 
 $(BUILDDIR):
-	mkdir -p $(BUILDDIR)
+	@mkdir -p $(BUILDDIR)
 
-$(BUILDDIR)%.o:$(SRCDIR)%.c
+$(BUILDDIR)%.o:$(SRCDIR)%.c $(DEBUG_FILE)
 	$(CC) $(CFLAGS) -I$(LIBFTDIR) -I$(INC) -o $@ -c $<
 
 $(LIBFT):
 			$(MAKE) $(LIBFTDIR)
 
-$(NAME): $(OBJS) $(DEBUG_FILE)
+$(NAME): $(BUILDDIR) $(LIBFT) $(OBJS) $(DEBUG_FILE)
 			$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBFT)
 clean:
 			rm -rf $(BUILDDIR)
