@@ -21,27 +21,23 @@ JPP			= $(shell cat ${DEBUG_FILE} | tr -d '\n')
 CDEBUG		= -fsanitize=address -g
 
 # SRC
-SRC_FOLDER 		= src/
-LIBFT_FOLDER	= $(addprefix $(SRC_FOLDER), libft/)
-LIBFT_ARC		= $(addprefix $(LIBFT_FOLDER), libft.a)
-SRC_FILES		= minishell.c\
-				  dir_name.c\
-				  env_function.c\
-				  execve_threading.c\
-				  input.c\
-				  handle_ctrl.c\
-				  handle_input.c
-SRCS			= $(addprefix $(SRC_FOLDER), $(SRC_FILES))
+SRCDIR 		= ./src/
+INC			= ./inc/
+LIBFTDIR	= ./libft/
+BUILDDIR	= ./build/
+LIBFT		= $(addprefix $(LIBFTDIR), libft.a)
+SRCNAMES	= $(shell ls $(SRCDIR) | grep -E ".+\.c")
+SRCS		= $(addprefix $(SRCDIR), $(SRCNAMES))
 
 # command + OBJ
 RM		= rm -rf
 MKDIR	= mkdir -p
 MAKE	= make -C
-OBJS	= $(SRCS:%.c=%.o)
+OBJS	= $(addprefix $(BUILDDIR), $(SRCNAMES:.c=.o))
 
 # Action
 
-all: padebug $(NAME)
+all: padebug $(BUILDDIR) $(LIBFT) $(NAME)
 
 padebug:
 ifneq ($(JPP),0)
@@ -53,17 +49,23 @@ ifneq ($(JPP),1)
 	@echo 1 > .debug
 endif
 
-libft:
-			$(MAKE) $(LIBFT_FOLDER)
+$(BUILDDIR):
+	mkdir -p $(BUILDDIR)
 
-$(NAME): $(OBJS) $(DEBUG_FILE) | libft
-			$(CC) -lreadline -I $(LIBFT_FOLDER) -I $(SRC_FOLDER) $(CFLAGS) $(OBJS) $(LIBFT_ARC) -o $@
+$(BUILDDIR)%.o:$(SRCDIR)%.c
+	$(CC) $(CFLAGS) -I$(LIBFTDIR) -I$(INC) -o $@ -c $<
+
+$(LIBFT):
+			$(MAKE) $(LIBFTDIR)
+
+$(NAME): $(OBJS) $(DEBUG_FILE)
+			$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBFT)
 clean:
-			rm -f $(OBJS)
-			$(MAKE) $(LIBFT_FOLDER) clean
+			rm -rf $(BUILDDIR)
+			$(MAKE) $(LIBFTDIR) clean
 
 fclean: clean
-			$(MAKE) $(LIBFT_FOLDER) fclean
+			$(MAKE) $(LIBFTDIR) fclean
 			rm -f $(NAME)
 
 debug: CFLAGS += $(CDEBUG)

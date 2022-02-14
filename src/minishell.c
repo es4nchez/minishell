@@ -24,11 +24,11 @@ static void	ft_set_termios(void)
 int main(int argc, char **argv, char **envp)
 {
 	char	*input;
-	int		i;
+	//int		i;
 
 	(void)argv;
 	(void)argc;
-	i = 0;
+	//i = 0;
 /*
 	printf("\n");
 	while (envp[i])
