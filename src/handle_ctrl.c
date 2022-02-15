@@ -14,8 +14,13 @@
 
 void	handle_ctrl(int	sig_nb)
 {
+	rl_replace_line("", 0);
 	if (sig_nb == SIGQUIT)
 		exit (0);
 	else if (sig_nb == SIGINT)
+	{
+		rl_on_new_line();
+		rl_redisplay();
 		return ;
+	}
 }

@@ -50,10 +50,10 @@ ifneq ($(JPP),1)
 endif
 
 $(BUILDDIR):
-	@mkdir -p $(BUILDDIR)
+			@mkdir -p $(BUILDDIR)
 
 $(BUILDDIR)%.o:$(SRCDIR)%.c $(DEBUG_FILE)
-	$(CC) $(CFLAGS) -I$(LIBFTDIR) -I$(INC) -o $@ -c $<
+			$(CC) $(CFLAGS) -I$(LIBFTDIR) -I$(INC) -o $@ -c $<
 
 $(LIBFT):
 			$(MAKE) $(LIBFTDIR)
