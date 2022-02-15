@@ -32,51 +32,53 @@ void    skip_space(char **str)
         *str++;
 }
 
-char    *proc_dquote(char **str)
+int	ft_isinset(char c, char *set)
+{
+	while (*set && c != *set)
+		set++;
+	return (*set);
+}
+
+void    get_quote(char **str, char copen)
+{
+    (*str)++;
+    while (**str != '\0' && **str != copen)
+    {
+        if (copen != '\'' && **str == '\'')
+            get_quote(str, '\'');
+        (*str)++;
+    }
+}
+
+char    *sep(char **str, char c, char *set)
 {
     char    *temp;
 
     temp = *str;
-    (*str)++;
-    while(**str != '\0' && **str != '"')
+    while(!ft_isinset(**str, set))
+    {
+        if (**str == '"' || **str == '\'')
+            get_quote(str, **str);
         (*str)++;
+    }
+    if (ft_isinset(c, "|<>"))
+            (*str)++;
     return (ft_substr(temp, 0, *str - temp));
 }
 
-char    *proc_quote(char **str)
-{
-    char    *temp;
-
-    temp = *str;
-    (*str)++;
-    while(**str != '\0' && **str != '\'')
-        (*str)++;
-    return (ft_substr(temp, 0, *str - temp));
-}
-
-char    *proc_doll(char **str)
-{
-    
-}
-
-char    *proc(char **str)
+char    *ft_proc(char **str)
 {
     char    *ret;
+
     skip_space(str);
-    if (**str == '"')
-        ret = proc_dquote(str);
-    else if (**str == '\'')
-        ret = proc_quote(str);
-    else if (**str == '$')
-        ret = proc_doll(str);
-    else if (**str == '|')
-        ret = proc_pipe(str);
+    if (**str == '|')
+        ret = sep(str, **str, "|\0");
     else if (**str == '<')
-        ret = proc_chevg(str);
+        ret = sep(str, **str, "<\0");
     else if (**str == '>')
-        ret = proc_chevd(str);
+        ret = sep(str, **str, ">\0");
     else
-        ret = proc_cmd(str);
+        ret = sep(str, **str, '|>< \0');
     return (ret);
 }
 char    *ft_process(char *str)
