@@ -16,6 +16,8 @@ NAME	= minishell
 # Compilation
 CC			= gcc
 CFLAGS		= -Wall -Wextra -Werror
+HEADS		= -I$(INC) -I${LIBFTDIR} -I${HOME}/.brew/Cellar/readline/8.1.2/include/
+LIBS		= -L${HOME}/.brew/Cellar/readline/8.1.2/lib/ -lreadline -lhistory
 DEBUG_FILE	= .debug
 JPP			= $(shell cat ${DEBUG_FILE} | tr -d '\n')
 CDEBUG		= -fsanitize=address -g
@@ -53,13 +55,13 @@ $(BUILDDIR):
 			@mkdir -p $(BUILDDIR)
 
 $(BUILDDIR)%.o:$(SRCDIR)%.c $(DEBUG_FILE)
-			$(CC) $(CFLAGS) -I$(LIBFTDIR) -I$(INC) -o $@ -c $<
+			$(CC) $(CFLAGS) $(HEADS) -o $@ -c $<
 
 $(LIBFT):
-			$(MAKE) $(LIBFTDIR)
+			$(MAKE) $(LIBFTDIR) bonus
 
 $(NAME): $(BUILDDIR) $(LIBFT) $(OBJS) $(DEBUG_FILE)
-			$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBFT) -lreadline
+			$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBFT) $(LIBS)
 clean:
 			rm -rf $(BUILDDIR)
 			$(MAKE) $(LIBFTDIR) clean

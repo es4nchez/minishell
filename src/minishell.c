@@ -23,7 +23,7 @@ static void	ft_set_termios(void)
 
 int main(int argc, char **argv, char **envp)
 {
-	char	*input;
+	t_input		*input;
 	//int		i;
 
 	(void)argv;

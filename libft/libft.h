@@ -17,6 +17,8 @@
 # include <unistd.h>
 # include <stdio.h>
 
+
+
 typedef struct s_list
 {
 	void			*content;
