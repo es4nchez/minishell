@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	handle_input(t_input *input, char **envp)
+void	handle_input(t_input *input)
 {
 // 	char	**cmd;
 // 	char	*final_cmd;

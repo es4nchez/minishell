@@ -84,13 +84,16 @@ char    *ft_proc(char **str)
 
 void    ft_process(t_input *input, char *str)
 {
-    int     i;
+    char    *tmp;
 
-    i = 0;
-    input->lst = ft_lstnew(NULL);
+    tmp = str;
+    if (!str || !input)
+        return ;
+    input->lstlen = 0;
     while (*str)
     {
-        ft_lstadd_front(&(input->lst), ft_lstnew(ft_proc(&str)));
+        ft_lstadd_back(&(input->lst), ft_lstnew(ft_proc(&str)));
         input->lstlen++;
     }
+    free(tmp);
 }
