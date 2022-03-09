@@ -14,14 +14,17 @@
 
 void	handle_ctrl(int	sig_nb)
 {
-	rl_replace_line("", 0);
-	ft_putendl_fd("", 1);
-	if (sig_nb == SIGQUIT)
-		exit (0);
-	else if (sig_nb == SIGINT)
+	if (sig_nb == SIGINT)
 	{
+		rl_replace_line("", 0);
+		ft_putendl_fd("", 1);
 		rl_on_new_line();
 		rl_redisplay();
 		return ;
+	}
+	else if (sig_nb == SIGQUIT)
+	{
+		rl_on_new_line();
+		rl_redisplay();
 	}
 }
