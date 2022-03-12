@@ -21,12 +21,19 @@ static void	ft_set_termios(void)
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &temp);
 }
 
+static void	init_input(t_input **input)
+{
+	*input = (t_input *)malloc(sizeof(t_input));
+	(*input)->lstlen = 0;
+}
+
 int main(int argc, char **argv, char **envp)
 {
-	char	*input;
+	t_input		*input;
 	//int		i;
 
 	(void)argv;
+	(void)envp;
 	(void)argc;
 	//i = 0;
 /*
@@ -38,15 +45,24 @@ int main(int argc, char **argv, char **envp)
 	}
 	printf("\n");
 */
-
+	init_input(&input);
+	if (!input)
+		return (0);
 	signal(SIGQUIT, handle_ctrl);
 	signal(SIGINT, handle_ctrl);
 	ft_set_termios();
 	while (1)
 	{
-		input = take_input();
-		add_history(input);
-		if (ft_strncmp(input, "", 1) == 0)
+		ft_lstclear(&(input->lst), free);
+		input->lineread = take_input();
+		if (input->lineread == NULL)
+		{
+   			free_input(input);
+			exit(0);
+		}
+		add_history(input->lineread);
+		ft_process(input, ft_strdup(input->lineread));
+		if (ft_strncmp(input->lineread, "", 1) == 0)
 			continue ;
 		else
 			handle_input(input, envp);

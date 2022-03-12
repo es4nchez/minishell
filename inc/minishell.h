@@ -31,6 +31,22 @@
 # include <time.h>
 # include <termios.h>
 
+
+
+typedef struct s_input
+{
+	int				lstlen;
+    char            *lineread;
+	t_list			*lst;
+}				t_input;
+
+// typedef struct  s_lstarg
+// {
+//     t_lstarg    *next;
+//     char        *arg;
+// }              t_lstarg;
+
+
 /*
 typedef struct s_stat {
     dev_t     st_dev;      ID of device containing file
@@ -52,14 +68,18 @@ typedef void (*sighandler_t)(int);
 typedef char *(*pars_func)(char *);
 
 sighandler_t signal(int signum, sighandler_t handler);
-
-char    *pars(char **str, char c, pars_func *pt);
+void    ft_process(t_input *input, char *str);
 char	*dir_name(void);
+void    bt_echo(t_input *input);
 char	*take_input(void);
-void	handle_input(char *input, char **envp);
+void    bt_input(t_input *input);
+void	handle_input(t_input *input, char **envp);
 void	handle_ctrl(int sig_nb);
 void	execve_threading(char *cmd, char **argv, char **envp);
 void	print_env(char **envp);
 void	export_env(char ***envp, char *input);
 void	unset_env(char ***envp, char *input);
+void    free_input(t_input *input);
+void    bt_exit(t_input *input);
+void    bt_env(char **envp);
 #endif

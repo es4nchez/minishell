@@ -1,40 +1,40 @@
 #include "minishell.h"
 
-char    *next_word(char *str)
-{
-    char    *s;
-    int     i;
+// char    *next_word(char *str)
+// {
+//     char    *s;
+//     int     i;
 
-    i = 0;
-    s = ft_strdup(str);
-    while (*(s + i) != '\0' || *(s + i) != ' ')
-        i++;
-    *(s + i) = '\0';
-    return (s);
-}
+//     i = 0;
+//     s = ft_strdup(str);
+//     while (*(s + i) != '\0' || *(s + i) != ' ')
+//         i++;
+//     *(s + i) = '\0';
+//     return (s);
+// }
 
-char    *pars(char *str, char c, pars_func *pt)
-{
-    char    *ret;
+// char    *pars(char *str, char c, pars_func *pt)
+// {
+//     char    *ret;
 
-    while (*str)
-    {
-        if (*str == c)
-            ret = (*pt)(next_word(str));
-        str++; 
-    }
-    return (ret);
-}
+//     while (*str)
+//     {
+//         if (*str == c)
+//             ret = (*pt)(next_word(str));
+//         str++; 
+//     }
+//     return (ret);
+// }
 
 void    skip_space(char **str)
 {
     while (**str == ' ')
-        *str++;
+        (*str)++;
 }
 
 int	ft_isinset(char c, char *set)
 {
-	while (*set && c != *set)
+	while (*set && c != '\0' && c != *set)
 		set++;
 	return (*set);
 }
@@ -72,24 +72,28 @@ char    *ft_proc(char **str)
 
     skip_space(str);
     if (**str == '|')
-        ret = sep(str, **str, "|\0");
+        ret = sep(str, **str, "|");
     else if (**str == '<')
-        ret = sep(str, **str, "<\0");
+        ret = sep(str, **str, "<");
     else if (**str == '>')
-        ret = sep(str, **str, ">\0");
+        ret = sep(str, **str, ">");
     else
-        ret = sep(str, **str, '|>< \0');
+        ret = sep(str, **str, "|>< ");
     return (ret);
 }
-char    *ft_process(char *str)
-{
-    char    **strs;
-    int     i;
 
-    i = 0;
+void    ft_process(t_input *input, char *str)
+{
+    char    *tmp;
+
+    tmp = str;
+    if (!str || !input)
+        return ;
+    input->lstlen = 0;
     while (*str)
     {
-        
-        str++;
+        ft_lstadd_back(&(input->lst), ft_lstnew(ft_proc(&str)));
+        input->lstlen++;
     }
+    free(tmp);
 }
