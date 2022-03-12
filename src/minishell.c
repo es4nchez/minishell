@@ -56,7 +56,10 @@ int main(int argc, char **argv, char **envp)
 		ft_lstclear(&(input->lst), free);
 		input->lineread = take_input();
 		if (input->lineread == NULL)
-			break ;
+		{
+   			free_input(input);
+			exit(0);
+		}
 		add_history(input->lineread);
 		ft_process(input, ft_strdup(input->lineread));
 		if (ft_strncmp(input->lineread, "", 1) == 0)
