@@ -65,7 +65,7 @@ int main(int argc, char **argv, char **envp)
 		if (ft_strncmp(input->lineread, "", 1) == 0)
 			continue ;
 		else
-			handle_input(input);
+			handle_input(input, envp);
 	}
 	return (0);
 }

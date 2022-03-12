@@ -73,10 +73,13 @@ char	*dir_name(void);
 void    bt_echo(t_input *input);
 char	*take_input(void);
 void    bt_input(t_input *input);
-void	handle_input(t_input *input);
+void	handle_input(t_input *input, char **envp);
 void	handle_ctrl(int sig_nb);
 void	execve_threading(char *cmd, char **argv, char **envp);
 void	print_env(char **envp);
 void	export_env(char ***envp, char *input);
 void	unset_env(char ***envp, char *input);
+void    free_input(t_input *input);
+void    bt_exit(t_input *input);
+void    bt_env(char **envp);
 #endif
