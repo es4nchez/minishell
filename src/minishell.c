@@ -61,7 +61,7 @@ int main(int argc, char **argv, char **envp)
 			exit(0);
 		}
 		add_history(input->lineread);
-		ft_process(input, ft_strdup(input->lineread));
+		ft_process(input, ft_strdup(input->lineread), envp);
 		if (ft_strncmp(input->lineread, "", 1) == 0)
 			continue ;
 		else

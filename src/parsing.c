@@ -64,7 +64,7 @@ char    *sep(char **str, char c, char *set)
     return (ft_substr(temp, 0, *str - temp));
 }
 
-char    *ft_proc(char **str)
+char    *ft_proc(char **str, char *envp)
 {
     char    *ret;
 
@@ -77,90 +77,13 @@ char    *ft_proc(char **str)
         ret = sep(str, **str, ">");
     else
         ret = sep(str, **str, "|>< ");
+    if (ft_strchr(ret,'$') && ret[0] != '\'')
+        ret = dol_parse(ret, envp);
     return (ret);
 }
 
-char    *get_env(char *var, char *envp)
-{
-    char    *rep;
-    int     i;
-    char    temp;
 
-    i = 0;
-    temp = ft_strnstr(envp, var, ft_strlen(envp));
-    temp = ft_strchr(temp, '=');
-    while (temp[i] != '\n')
-        i++;
-    rep = ft_substr(temp, 0, i);    
-
-    return (rep);
-}
-
-char    *get_content_list(t_list *list)
-{
-    char    *rep;
-    char    *dol;
-
-    if (list->content != NULL)
-    {
-        rep = (char *)list->content;
-        if (*rep == '"' || *rep == '\'')
-        {
-           
-        }
-    }
-    else
-        rep = NULL;
-    return (rep);
-}
-
-char    *get_var(char *str)
-{
-    int i;
-    char    *rep;
-
-    i = 0;
-    while (ft_isalnum(str[i]))
-        i++;
-    rep = ft_substr(str, 1, i);  
-    return (rep);
-}
-
-char    *concat_strvar(char *str, char *var, int loc)
-{
-    int     len;
-    char    *res;
-
-    len = ft_strlen(str) + ft_strlen(var);
-    res = (char *)malloc((len * sizeof(char)) + 1);
-    
-}
-
-char    *quote_parse(char *str, char *envp)
-{
-    char    *dol;
-    char    *temp;
-    char    *var_res;
-    char    *res;
-
-    str++;
-    if (*str == '"')
-    {
-        temp = ft_strchr(str, '$');
-        if (temp != NULL)
-        {
-            dol = get_var(dol);
-            var_res = get_env(dol, envp);
-            if (dol)
-                free(dol);
-            res = concat_strvar(str, var_res, temp - str);
-        }
-    }
-
-
-}
-
-void    ft_process(t_input *input, char *str)
+void    ft_process(t_input *input, char *str, char *envp)
 {
     char    *tmp;
 
@@ -170,7 +93,7 @@ void    ft_process(t_input *input, char *str)
     input->lstlen = 0;
     while (*str)
     {
-        ft_lstadd_back(&(input->lst), ft_lstnew(ft_proc(&str)));
+        ft_lstadd_back(&(input->lst), ft_lstnew(ft_proc(&str, envp)));
         input->lstlen++;
     }
     free(tmp);
