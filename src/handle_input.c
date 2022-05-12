@@ -21,23 +21,23 @@ void	handle_input(t_input *input, char **envp)
 		bt_echo(input);
 	// cmd = ft_split(input, ' ');
 	// final_cmd = ft_strjoin("/bin/", cmd[0]);
-	// if (ft_strncmp(input, "cd ", 3) == 0)
-	// 	chdir(ft_substr(input, 3, ft_strlen(input)));
+	else if (ft_strncmp(input->lst->content, "cd", 2) == 0)
+	 	bt_cd(envp, ft_split(input->lineread, ' ')[1]);
 	else if (ft_strncmp(input->lst->content, "exit", 4) == 0)
 		bt_exit(input);
-	// else if (ft_strncmp(input, "pwd", 3) == 0)
-	// 	printf("%s\n", dir_name());
+	else if (ft_strncmp(input->lst->content, "pwd", 3) == 0)
+		bt_pwd(envp);
 	// else if (ft_strncmp(input, "echo -n", 7) == 0)
 	// 	printf("%s\e[7m%%\e[0m\n", ft_substr(input, 8, ft_strlen(input)));
 	// else if (ft_strncmp(input, "echo", 4) == 0 )
 	// 	bt_echo();
 	else if (ft_strncmp(input->lst->content, "env", 3) == 0)
 		bt_env(envp);
-	// else if (ft_strncmp(input, "export", 6) == 0)
-	// 	export_env(&envp, cmd[1]);
-	// else if (ft_strncmp(input, "unset", 5) == 0)
-	// 	unset_env(&envp, cmd[1]);
-	// else
-	// 	execve_threading(final_cmd, cmd, envp);
+	else if (ft_strncmp(input->lst->content, "export", 6) == 0)
+	 	bt_export(envp, input->lineread);
+	else if (ft_strncmp(input->lst->content, "unset", 5) == 0)
+		bt_unset(envp, input->lineread);
+//	 else
+//	 	execve_threading(final_cmd, cmd, envp);
 	return ;
 }
