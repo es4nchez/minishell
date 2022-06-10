@@ -13,7 +13,6 @@ Idée de Workflow ( à modifier ) :
 
 To do :
 
-* Les ctrl+c / ctrl+z etc..
+* les perror etc + code de sortie
 * Les pipes
 * Du parsing propre
-* So much more

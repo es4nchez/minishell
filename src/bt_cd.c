@@ -1,22 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bt_env.c                                           :+:      :+:    :+:   */
+/*   bt_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/31 14:44:48 by esanchez          #+#    #+#             */
-/*   Updated: 2022/03/31 14:44:51 by esanchez         ###   ########.fr       */
+/*   Created: 2022/03/25 14:56:48 by esanchez          #+#    #+#             */
+/*   Updated: 2022/03/25 14:56:51 by esanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	bt_env(char **envp)
+void	bt_cd(char **envp, char *arg)
 {
 	int	i;
+	char	*error;
 
-	i = -1;
-	while (envp[++i])
-		ft_putendl_fd(envp[i], 1);
+	i = 0;
+	if (!arg)
+	{
+		while (ft_strncmp(envp[i], "HOME=", 5) != 0)
+			i++;
+		arg = ft_substr(envp[i], 5, 255);
+		chdir(arg);
+	}
+	else if (chdir(arg) == -1)
+	{
+		error = ft_strjoin("cd: ", arg);
+		perror(error);
+	}
+	return ;
 }

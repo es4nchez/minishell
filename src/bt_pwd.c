@@ -1,22 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bt_env.c                                           :+:      :+:    :+:   */
+/*   bt_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/31 14:44:48 by esanchez          #+#    #+#             */
-/*   Updated: 2022/03/31 14:44:51 by esanchez         ###   ########.fr       */
+/*   Created: 2022/03/25 14:46:11 by esanchez          #+#    #+#             */
+/*   Updated: 2022/03/25 14:46:13 by esanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	bt_env(char **envp)
+void	bt_pwd(char **envp)
 {
-	int	i;
-
-	i = -1;
-	while (envp[++i])
-		ft_putendl_fd(envp[i], 1);
+	(void)envp;
+	printf("%s\n", dir_name());
 }
