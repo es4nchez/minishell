@@ -1,4 +1,4 @@
-#include "minishell.h"
+/*#include "minishell.h"
 
 char    *concat_strvar(char *str, char *var, int loc)
 {
@@ -84,4 +84,4 @@ char    *dol_parse(char *str, char **envp)
         free(str);
         return (var);
     }
-}
+}*/

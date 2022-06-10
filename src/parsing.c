@@ -64,10 +64,11 @@ char    *sep(char **str, char c, char *set)
     return (ft_substr(temp, 0, *str - temp));
 }
 
-char    *ft_proc(char **str, char *envp)
+char    *ft_proc(char **str, char **envp)
 {
     char    *ret;
 
+    (void)envp;
     skip_space(str);
     if (**str == '|')
         ret = sep(str, **str, "|");
@@ -77,13 +78,13 @@ char    *ft_proc(char **str, char *envp)
         ret = sep(str, **str, ">");
     else
         ret = sep(str, **str, "|>< ");
-    if (ft_strchr(ret,'$') && ret[0] != '\'')
-        ret = dol_parse(ret, envp);
+    //if (ft_strchr(ret,'$') && ret[0] != '\'')
+        //ret = dol_parse(ret, envp);
     return (ret);
 }
 
 
-void    ft_process(t_input *input, char *str, char *envp)
+void    ft_process(t_input *input, char *str, char **envp)
 {
     char    *tmp;
 

@@ -68,11 +68,9 @@ typedef void (*sighandler_t)(int);
 typedef char *(*pars_func)(char *);
 
 sighandler_t signal(int signum, sighandler_t handler);
-void    ft_process(t_input *input, char *str, char *envp);
+void    ft_process(t_input *input, char *str, char **envp);
 char	*dir_name(void);
-void    bt_echo(t_input *input);
 char	*take_input(void);
-void    bt_input(t_input *input);
 void	handle_input(t_input *input, char **envp);
 void	handle_ctrl(int sig_nb);
 void	execve_threading(char *cmd, char **argv, char **envp);
@@ -82,5 +80,11 @@ void	unset_env(char ***envp, char *input);
 void    free_input(t_input *input);
 void    bt_exit(t_input *input);
 void    bt_env(char **envp);
-char    *dol_parse(char *str, char *envp);
+void	bt_cd(char **envp, char *arg);
+void    bt_input(t_input *input);
+void    bt_echo(t_input *input);
+void	bt_pwd(char **envp);
+void	bt_export(char **envp, char *arg);
+void	bt_unset(char **envp, char *arg);
+//char    *dol_parse(char *str, char *envp);
 #endif
