@@ -1,40 +1,40 @@
 #include "minishell.h"
 
-char    *next_word(char *str)
-{
-    char    *s;
-    int     i;
+// char    *next_word(char *str)
+// {
+//     char    *s;
+//     int     i;
 
-    i = 0;
-    s = ft_strdup(str);
-    while (*(s + i) != '\0' || *(s + i) != ' ')
-        i++;
-    *(s + i) = '\0';
-    return (s);
-}
+//     i = 0;
+//     s = ft_strdup(str);
+//     while (*(s + i) != '\0' || *(s + i) != ' ')
+//         i++;
+//     *(s + i) = '\0';
+//     return (s);
+// }
 
-char    *pars(char *str, char c, pars_func *pt)
-{
-    char    *ret;
+// char    *pars(char *str, char c, pars_func *pt)
+// {
+//     char    *ret;
 
-    while (*str)
-    {
-        if (*str == c)
-            ret = (*pt)(next_word(str));
-        str++; 
-    }
-    return (ret);
-}
+//     while (*str)
+//     {
+//         if (*str == c)
+//             ret = (*pt)(next_word(str));
+//         str++; 
+//     }
+//     return (ret);
+// }
 
 void    skip_space(char **str)
 {
     while (**str == ' ')
-        *str++;
+        (*str)++;
 }
 
 int	ft_isinset(char c, char *set)
 {
-	while (*set && c != *set)
+	while (*set && c != '\0' && c != *set)
 		set++;
 	return (*set);
 }
@@ -43,11 +43,9 @@ void    get_quote(char **str, char copen)
 {
     (*str)++;
     while (**str != '\0' && **str != copen)
-    {
-        if (copen != '\'' && **str == '\'')
-            get_quote(str, '\'');
         (*str)++;
-    }
+    if (**str == '\0')
+        return ;                              //TODO : error quote non fermee
 }
 
 char    *sep(char **str, char c, char *set)
@@ -66,30 +64,38 @@ char    *sep(char **str, char c, char *set)
     return (ft_substr(temp, 0, *str - temp));
 }
 
-char    *ft_proc(char **str)
+char    *ft_proc(char **str, char **envp)
 {
     char    *ret;
 
+    (void)envp;
     skip_space(str);
     if (**str == '|')
-        ret = sep(str, **str, "|\0");
+        ret = sep(str, **str, "|");
     else if (**str == '<')
-        ret = sep(str, **str, "<\0");
+        ret = sep(str, **str, "<");
     else if (**str == '>')
-        ret = sep(str, **str, ">\0");
+        ret = sep(str, **str, ">");
     else
-        ret = sep(str, **str, '|>< \0');
+        ret = sep(str, **str, "|>< ");
+    //if (ft_strchr(ret,'$') && ret[0] != '\'')
+        //ret = dol_parse(ret, envp);
     return (ret);
 }
-char    *ft_process(char *str)
-{
-    char    **strs;
-    int     i;
 
-    i = 0;
+
+void    ft_process(t_input *input, char *str, char **envp)
+{
+    char    *tmp;
+
+    tmp = str;
+    if (!str || !input)
+        return ;
+    input->lstlen = 0;
     while (*str)
     {
-        
-        str++;
+        ft_lstadd_back(&(input->lst), ft_lstnew(ft_proc(&str, envp)));
+        input->lstlen++;
     }
+    free(tmp);
 }

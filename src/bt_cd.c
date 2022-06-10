@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_ctrl.c                                      :+:      :+:    :+:   */
+/*   bt_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/28 16:54:20 by esanchez          #+#    #+#             */
-/*   Updated: 2022/02/04 16:20:39 by yalthaus         ###   ########.fr       */
+/*   Created: 2022/03/25 14:56:48 by esanchez          #+#    #+#             */
+/*   Updated: 2022/03/25 14:56:51 by esanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_ctrl(int	sig_nb)
+void	bt_cd(char **envp, char *arg)
 {
-	if (sig_nb == SIGINT)
+	int	i;
+	char	*error;
+
+	i = 0;
+	if (!arg)
 	{
-		rl_replace_line("", 0);
-		ft_putendl_fd("", 1);
-		rl_on_new_line();
-		rl_redisplay();
-		return ;
+		while (ft_strncmp(envp[i], "HOME=", 5) != 0)
+			i++;
+		arg = ft_substr(envp[i], 5, 255);
+		chdir(arg);
 	}
-	else if (sig_nb == SIGQUIT)
+	else if (chdir(arg) == -1)
 	{
-		rl_on_new_line();
-		rl_redisplay();
+		error = ft_strjoin("cd: ", arg);
+		perror(error);
 	}
+	return ;
 }

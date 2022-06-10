@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handle_ctrl.c                                      :+:      :+:    :+:   */
+/*   bt_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/28 16:54:20 by esanchez          #+#    #+#             */
-/*   Updated: 2022/02/04 16:20:39 by yalthaus         ###   ########.fr       */
+/*   Created: 2022/03/31 14:18:10 by esanchez          #+#    #+#             */
+/*   Updated: 2022/03/31 14:18:12 by esanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_ctrl(int	sig_nb)
+void	bt_unset(char **envp, char *arg)
 {
-	if (sig_nb == SIGINT)
-	{
-		rl_replace_line("", 0);
-		ft_putendl_fd("", 1);
-		rl_on_new_line();
-		rl_redisplay();
+	char	*env_arg;
+	int		i;
+
+	i = 0;
+	if (!ft_split(arg, ' ')[1])
 		return ;
-	}
-	else if (sig_nb == SIGQUIT)
+	env_arg = ft_split(ft_split(arg, ' ')[1], '=')[0];
+	while (envp[i] != NULL)
 	{
-		rl_on_new_line();
-		rl_redisplay();
+		if (ft_strncmp(envp[i], env_arg, ft_strlen(env_arg)) == 0)
+		{
+			envp[i] = envp[i + 1];
+			return ;
+		}
+		i++;
 	}
+	return ;
 }

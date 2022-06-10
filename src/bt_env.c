@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   bt_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/12 10:15:39 by yalthaus          #+#    #+#             */
-/*   Updated: 2022/01/04 09:51:49 by yalthaus         ###   ########.fr       */
+/*   Created: 2022/03/31 14:44:48 by esanchez          #+#    #+#             */
+/*   Updated: 2022/03/31 14:44:51 by esanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	*ft_realloc(void *ptr, int len)
+void	bt_env(char **envp)
 {
-	char	*ret;
+	int	i;
 
-	ret = malloc(len);
-	if (ret == NULL)
-		return (NULL);
-	if (!ft_memcpy(ret, ptr, len - 8))
-		return (NULL);
-	*(ret + len - 8) = 0;
-	free(ptr);
-	return (ret);
+	i = -1;
+	while (envp[++i])
+		ft_putendl_fd(envp[i], 1);
 }
