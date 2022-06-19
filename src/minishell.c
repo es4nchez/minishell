@@ -53,7 +53,6 @@ int main(int argc, char **argv, char **envp)
 	ft_set_termios();
 	while (1)
 	{
-		ft_lstclear(&(input->lst), free);
 		input->lineread = take_input();
 		if (input->lineread == NULL)
 		{
@@ -65,7 +64,9 @@ int main(int argc, char **argv, char **envp)
 		if (ft_strncmp(input->lineread, "", 1) == 0)
 			continue ;
 		else
-			handle_input(input, envp);
+			builtins(input, envp);
+		if (input->lineread)
+			ft_cmdclear(&(input->cmds), free);
 	}
 	return (0);
 }

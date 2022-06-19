@@ -28,7 +28,7 @@
 
 void    skip_space(char **str)
 {
-    while (**str == ' ')
+    while (**str && **str == ' ')
         (*str)++;
 }
 
@@ -53,7 +53,7 @@ char    *sep(char **str, char c, char *set)
     char    *temp;
 
     temp = *str;
-    while(!ft_isinset(**str, set))
+    while(**str && !ft_isinset(**str, set))
     {
         if (**str == '"' || **str == '\'')
             get_quote(str, **str);
@@ -64,37 +64,56 @@ char    *sep(char **str, char c, char *set)
     return (ft_substr(temp, 0, *str - temp));
 }
 
-char    *ft_proc(char **str, char **envp)
+t_list    *ft_pars_arg(char **str)
 {
-    char    *ret;
+    t_list    *ret;
 
-    (void)envp;
     skip_space(str);
-    if (**str == '|')
-        ret = sep(str, **str, "|");
-    else if (**str == '<')
-        ret = sep(str, **str, "<");
-    else if (**str == '>')
-        ret = sep(str, **str, ">");
-    else
-        ret = sep(str, **str, "|>< ");
-    //if (ft_strchr(ret,'$') && ret[0] != '\'')
-        //ret = dol_parse(ret, envp);
+    ret = ft_lstnew(NULL);
+    while(!ft_isinset(**str, "|<> "))
+    {
+        ft_lstadd_back(&ret, ft_lstnew(sep(str, **str, "|<> ")));
+        skip_space(str);
+    }
     return (ret);
 }
 
+t_lstcmd    *ft_pars_cmd(char **str)
+{
+    t_lstcmd    *cmd;
+
+	cmd = malloc(sizeof(t_lstcmd));
+    skip_space(str);
+    cmd->next = NULL;
+    if (**str == '|')
+        cmd->cmd = sep(str, **str, "|");
+    else if (**str == '<')
+        cmd->cmd = sep(str, **str, "<");
+    else if (**str == '>')
+        cmd->cmd = sep(str, **str, ">");
+    else
+    {
+        cmd->cmd = sep(str, **str, "|>< ");
+        cmd->args = ft_pars_arg(str);
+        return (cmd);
+    }
+    cmd->args = ft_lstnew(NULL);
+    return (cmd);
+}
 
 void    ft_process(t_input *input, char *str, char **envp)
 {
     char    *tmp;
 
+    (void)envp;
     tmp = str;
     if (!str || !input)
         return ;
     input->lstlen = 0;
+    input->cmds = ft_cmdnew(NULL, NULL);
     while (*str)
     {
-        ft_lstadd_back(&(input->lst), ft_lstnew(ft_proc(&str, envp)));
+        ft_cmdadd_back(&(input->cmds), ft_pars_cmd(&str));
         input->lstlen++;
     }
     free(tmp);

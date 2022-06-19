@@ -2,7 +2,8 @@
 
 void    free_input(t_input *input)
 {
-    ft_lstclear(&(input->lst), free);
+    if (input->lineread)
+        ft_cmdclear(&(input->cmds), free);
     free(input->lineread);
     free(input);
 }
