@@ -31,21 +31,19 @@
 # include <time.h>
 # include <termios.h>
 
-
+typedef struct s_lstcmd
+{
+    char                *cmd;
+    struct s_lstcmd     *next;
+    t_list              *args;
+}               t_lstcmd;
 
 typedef struct s_input
 {
 	int				lstlen;
     char            *lineread;
-	t_list			*lst;
+	t_lstcmd		*cmds;
 }				t_input;
-
-// typedef struct  s_lstarg
-// {
-//     t_lstarg    *next;
-//     char        *arg;
-// }              t_lstarg;
-
 
 /*
 typedef struct s_stat {
@@ -65,13 +63,12 @@ typedef struct s_stat {
 }	t_stat;
 */
 typedef void (*sighandler_t)(int);
-typedef char *(*pars_func)(char *);
 
 sighandler_t signal(int signum, sighandler_t handler);
 void    ft_process(t_input *input, char *str, char **envp);
 char	*dir_name(void);
 char	*take_input(void);
-void	handle_input(t_input *input, char **envp);
+void	builtins(t_input *input, char **envp);
 void	handle_ctrl(int sig_nb);
 void	execve_threading(char *cmd, char **argv, char **envp);
 void	print_env(char **envp);
@@ -86,5 +83,10 @@ void    bt_echo(t_input *input);
 void	bt_pwd(char **envp);
 void	bt_export(char **envp, char *arg);
 void	bt_unset(char **envp, char *arg);
+
+void	ft_cmdadd_back(t_lstcmd **cmds, t_lstcmd *new);
+t_lstcmd	*ft_cmdnew(char *cmd, t_list *args);
+void	ft_cmdclear(t_lstcmd **lst, void (*del)(void *));
+
 //char    *dol_parse(char *str, char *envp);
 #endif
