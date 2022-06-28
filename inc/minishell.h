@@ -79,7 +79,7 @@ void    bt_exit(t_input *input);
 void    bt_env(char **envp);
 void	bt_cd(char **envp, char *arg);
 void    bt_input(t_input *input);
-void    bt_echo(t_input *input);
+void    bt_echo(t_lstcmd *cmds);
 void	bt_pwd(char **envp);
 void	bt_export(char **envp, char *arg);
 void	bt_unset(char **envp, char *arg);

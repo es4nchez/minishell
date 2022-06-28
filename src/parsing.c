@@ -95,6 +95,7 @@ t_lstcmd    *ft_pars_cmd(char **str)
     {
         cmd->cmd = sep(str, **str, "|>< ");
         cmd->args = ft_pars_arg(str);
+        cmd->args = cmd->args->next;
         return (cmd);
     }
     cmd->args = ft_lstnew(NULL);
@@ -116,5 +117,6 @@ void    ft_process(t_input *input, char *str, char **envp)
         ft_cmdadd_back(&(input->cmds), ft_pars_cmd(&str));
         input->lstlen++;
     }
+    input->cmds = input->cmds->next;
     free(tmp);
 }
