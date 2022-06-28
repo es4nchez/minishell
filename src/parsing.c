@@ -90,8 +90,8 @@ char    *ft_proc(char **str, char **envp)
         ret = sep(str, **str, ">");
     else
         ret = sep(str, **str, "|>< ");
-    //if (ft_strchr(ret,'$') && ret[0] != '\'')
-        //ret = dol_parse(ret, envp);
+    if (ft_strchr(ret,'$') && ret[0] != '\'')
+        ret = dol_parse(ret, envp);
     return (ret);
 }
 
@@ -104,10 +104,12 @@ void    ft_process(t_input *input, char *str, char **envp)
     if (!str || !input)
         return ;
     input->lstlen = 0;
+	input->lst = ft_lstnew(NULL);
     while (*str)
     {
         ft_lstadd_back(&(input->lst), ft_lstnew(ft_proc(&str, envp)));
         input->lstlen++;
     }
+    input->lst = input->lst->next;
     free(tmp);
 }

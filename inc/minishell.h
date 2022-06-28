@@ -86,5 +86,5 @@ void    bt_echo(t_input *input);
 void	bt_pwd(char **envp);
 void	bt_export(char **envp, char *arg);
 void	bt_unset(char **envp, char *arg);
-//char    *dol_parse(char *str, char *envp);
+char    *dol_parse(char *str, char **envp);
 #endif
