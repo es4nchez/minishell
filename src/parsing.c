@@ -28,7 +28,7 @@
 
 void    skip_space(char **str)
 {
-    while (**str == ' ')
+    while (**str && **str == ' ')
         (*str)++;
 }
 
@@ -53,7 +53,7 @@ char    *sep(char **str, char c, char *set)
     char    *temp;
 
     temp = *str;
-    while(!ft_isinset(**str, set))
+    while(**str && !ft_isinset(**str, set))
     {
         if (**str == '"' || **str == '\'')
             get_quote(str, **str);
@@ -64,38 +64,91 @@ char    *sep(char **str, char c, char *set)
     return (ft_substr(temp, 0, *str - temp));
 }
 
-char    *ft_proc(char **str, char **envp)
+char    *rm_quote(char *s)
 {
-    char    *ret;
+    char    *temp;
 
-    (void)envp;
+    temp = ft_substr(s, 1, ft_strlen(s) - 2);
+    free(s);
+    return (temp);
+}
+
+t_list    *ft_pars_arg(char **str, char **envp)
+{
+    t_list  *ret;
+    t_list  *tmp;
+    char    *temp;
+    char    *s;
+
     skip_space(str);
-    if (**str == '|')
-        ret = sep(str, **str, "|");
-    else if (**str == '<')
-        ret = sep(str, **str, "<");
-    else if (**str == '>')
-        ret = sep(str, **str, ">");
-    else
-        ret = sep(str, **str, "|>< ");
-    //if (ft_strchr(ret,'$') && ret[0] != '\'')
-        //ret = dol_parse(ret, envp);
+    ret = ft_lstnew(NULL);
+    while(!ft_isinset(**str, "|<> "))
+    {
+        s = sep(str, **str, "|<> ");
+        if (ft_strchr(s,'$') && s[0] != '\'')
+        {
+            temp = dol_parse(s, envp);
+            free(s);
+            s = temp;
+        }
+        if (s && (s[0] == '\'' || s[0] == '"'))
+            s = rm_quote(s);
+        ft_lstadd_back(&ret, ft_lstnew(s));
+        skip_space(str);
+    }
+    tmp = ret->next;
+    free(ret);
+    ret = tmp;
     return (ret);
 }
 
+t_lstcmd    *ft_pars_cmd(char **str, char **envp)
+{
+    t_lstcmd    *cmd;
+    char    *temp;
+
+	cmd = malloc(sizeof(t_lstcmd));
+    skip_space(str);
+    cmd->next = NULL;
+    if (**str == '|')
+        cmd->cmd = sep(str, **str, "|");
+    else if (**str == '<')
+        cmd->cmd = sep(str, **str, "<");
+    else if (**str == '>')
+        cmd->cmd = sep(str, **str, ">");
+    else
+    {
+        cmd->cmd = sep(str, **str, "|>< ");
+        cmd->args = ft_pars_arg(str, envp);
+        if (ft_strchr(cmd->cmd,'$') && cmd->cmd[0] != '\'')
+        {
+            temp = dol_parse(cmd->cmd, envp);
+            free(cmd->cmd);
+            cmd->cmd = temp;
+        }
+        return (cmd);
+    }
+    cmd->args = ft_lstnew(NULL);
+    return (cmd);
+}
 
 void    ft_process(t_input *input, char *str, char **envp)
 {
-    char    *tmp;
+    char        *tmp;
+    t_lstcmd    *temp;
 
     tmp = str;
     if (!str || !input)
         return ;
     input->lstlen = 0;
+    input->cmds = ft_cmdnew(NULL, NULL);
     while (*str)
     {
-        ft_lstadd_back(&(input->lst), ft_lstnew(ft_proc(&str, envp)));
+        ft_cmdadd_back(&(input->cmds), ft_pars_cmd(&str, envp));
         input->lstlen++;
     }
+    temp = input->cmds->next;
+    free(input->cmds);
+    input->cmds = temp;
     free(tmp);
 }
