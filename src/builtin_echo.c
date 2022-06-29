@@ -6,7 +6,7 @@ int get_option(t_list *lst, char c)
     int i;
 
     ret = 0;
-    while (lst)
+    while (lst && lst->content)
     {
         if (*(char *)lst->content == '-')
         {
@@ -31,11 +31,11 @@ int get_option(t_list *lst, char c)
 
 void    bt_echo_print(t_list *temp)
 {
-    while (temp && *(char *)temp->content == '-')
+    while (temp && temp->content && *(char *)temp->content == '-')
     {
         temp = temp->next;
     }
-    while (temp)
+    while (temp && temp->content)
     {
         write(1, temp->content, ft_strlen(temp->content));
         temp = temp->next;

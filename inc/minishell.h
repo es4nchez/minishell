@@ -83,7 +83,7 @@ void    bt_echo(t_lstcmd *cmds);
 void	bt_pwd(char **envp);
 void	bt_export(char **envp, char *arg);
 void	bt_unset(char **envp, char *arg);
-
+char    *dol_parse(char *str, char **envp);
 void	ft_cmdadd_back(t_lstcmd **cmds, t_lstcmd *new);
 t_lstcmd	*ft_cmdnew(char *cmd, t_list *args);
 void	ft_cmdclear(t_lstcmd **lst, void (*del)(void *));
