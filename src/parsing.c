@@ -105,6 +105,7 @@ t_list    *ft_pars_arg(char **str, char **envp)
 t_lstcmd    *ft_pars_cmd(char **str, char **envp)
 {
     t_lstcmd    *cmd;
+    char    *temp;
 
 	cmd = malloc(sizeof(t_lstcmd));
     skip_space(str);
@@ -119,6 +120,12 @@ t_lstcmd    *ft_pars_cmd(char **str, char **envp)
     {
         cmd->cmd = sep(str, **str, "|>< ");
         cmd->args = ft_pars_arg(str, envp);
+        if (ft_strchr(cmd->cmd,'$') && cmd->cmd[0] != '\'')
+        {
+            temp = dol_parse(cmd->cmd, envp);
+            free(cmd->cmd);
+            cmd->cmd = temp;
+        }
         return (cmd);
     }
     cmd->args = ft_lstnew(NULL);

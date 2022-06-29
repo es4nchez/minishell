@@ -53,7 +53,7 @@ void	builtins(t_input *input, char **envp)
 	 	bt_export(envp, input->lineread);
 	else if (ft_strncmp(input->cmds->cmd, "unset", 5) == 0)
 		bt_unset(envp, input->lineread);
-//	 else
-//	 	execve_threading(final_cmd, cmd, envp);
+	 else
+	 	execve_threading(input->cmds, envp);
 	return ;
 }

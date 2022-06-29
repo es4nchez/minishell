@@ -70,7 +70,7 @@ char	*dir_name(void);
 char	*take_input(void);
 void	builtins(t_input *input, char **envp);
 void	handle_ctrl(int sig_nb);
-void	execve_threading(char *cmd, char **argv, char **envp);
+void	execve_threading(t_lstcmd *cmd, char **envp);
 void	print_env(char **envp);
 void	export_env(char ***envp, char *input);
 void	unset_env(char ***envp, char *input);
@@ -87,6 +87,7 @@ char    *dol_parse(char *str, char **envp);
 void	ft_cmdadd_back(t_lstcmd **cmds, t_lstcmd *new);
 t_lstcmd	*ft_cmdnew(char *cmd, t_list *args);
 void	ft_cmdclear(t_lstcmd **lst, void (*del)(void *));
+char    *get_env(char *str, char **envp);
 
 //char    *dol_parse(char *str, char *envp);
 #endif
