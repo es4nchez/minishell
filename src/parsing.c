@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/24 13:45:17 by esanchez          #+#    #+#             */
+/*   Updated: 2022/02/04 16:20:41 by yalthaus         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 // char    *next_word(char *str)
@@ -64,23 +76,48 @@ char    *sep(char **str, char c, char *set)
     return (ft_substr(temp, 0, *str - temp));
 }
 
-t_list    *ft_pars_arg(char **str)
+char    *rm_quote(char *s)
 {
-    t_list    *ret;
+    char    *temp;
+
+    temp = ft_substr(s, 1, ft_strlen(s) - 2);
+    free(s);
+    return (temp);
+}
+
+t_list    *ft_pars_arg(char **str, char **envp)
+{
+    t_list  *ret;
+    t_list  *tmp;
+    char    *temp;
+    char    *s;
 
     skip_space(str);
     ret = ft_lstnew(NULL);
     while(!ft_isinset(**str, "|<> "))
     {
-        ft_lstadd_back(&ret, ft_lstnew(sep(str, **str, "|<> ")));
+        s = sep(str, **str, "|<> ");
+        if (ft_strchr(s,'$') && s[0] != '\'')
+        {
+            temp = dol_parse(s, envp);
+            free(s);
+            s = temp;
+        }
+        if (s && (s[0] == '\'' || s[0] == '"'))
+            s = rm_quote(s);
+        ft_lstadd_back(&ret, ft_lstnew(s));
         skip_space(str);
     }
+    tmp = ret->next;
+    free(ret);
+    ret = tmp;
     return (ret);
 }
 
-t_lstcmd    *ft_pars_cmd(char **str)
+t_lstcmd    *ft_pars_cmd(char **str, char **envp)
 {
     t_lstcmd    *cmd;
+    char    *temp;
 
 	cmd = malloc(sizeof(t_lstcmd));
     skip_space(str);
@@ -94,7 +131,13 @@ t_lstcmd    *ft_pars_cmd(char **str)
     else
     {
         cmd->cmd = sep(str, **str, "|>< ");
-        cmd->args = ft_pars_arg(str);
+        cmd->args = ft_pars_arg(str, envp);
+        if (ft_strchr(cmd->cmd,'$') && cmd->cmd[0] != '\'')
+        {
+            temp = dol_parse(cmd->cmd, envp);
+            free(cmd->cmd);
+            cmd->cmd = temp;
+        }
         return (cmd);
     }
     cmd->args = ft_lstnew(NULL);
@@ -103,7 +146,8 @@ t_lstcmd    *ft_pars_cmd(char **str)
 
 void    ft_process(t_input *input, char *str, char **envp)
 {
-    char    *tmp;
+    char        *tmp;
+    t_lstcmd    *temp;
 
     (void)envp;
     tmp = str;
@@ -113,8 +157,11 @@ void    ft_process(t_input *input, char *str, char **envp)
     input->cmds = ft_cmdnew(NULL, NULL);
     while (*str)
     {
-        ft_cmdadd_back(&(input->cmds), ft_pars_cmd(&str));
+        ft_cmdadd_back(&(input->cmds), ft_pars_cmd(&str, envp));
         input->lstlen++;
     }
+    temp = input->cmds->next;
+    free(input->cmds);
+    input->cmds = temp;
     free(tmp);
 }

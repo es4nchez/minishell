@@ -27,24 +27,29 @@ static void	init_input(t_input **input)
 	(*input)->lstlen = 0;
 }
 
+static char	**env_dup(char **envp)
+{
+	char	**dup;
+	int		i;
+
+	i = 0;
+	while (envp[i++]);
+	dup = ft_calloc(i + 1, sizeof(char *));
+	i = -1;
+	while (envp[++i])
+		dup[i] = ft_strdup(envp[i]);
+	dup[i] = NULL;
+	return (dup);
+}
+
 int main(int argc, char **argv, char **envp)
 {
 	t_input		*input;
-	//int		i;
+	char		**env;
 
 	(void)argv;
-	(void)envp;
 	(void)argc;
-	//i = 0;
-/*
-	printf("\n");
-	while (envp[i])
-	{
-		printf("%s\n", envp[i]);
-		i++;
-	}
-	printf("\n");
-*/
+	env = env_dup(envp);
 	init_input(&input);
 	if (!input)
 		return (0);
@@ -60,11 +65,11 @@ int main(int argc, char **argv, char **envp)
 			exit(0);
 		}
 		add_history(input->lineread);
-		ft_process(input, ft_strdup(input->lineread), envp);
+		ft_process(input, ft_strdup(input->lineread), env);
 		if (ft_strncmp(input->lineread, "", 1) == 0)
 			continue ;
 		else
-			builtins(input, envp);
+			execution(input, env);
 		if (input->lineread)
 			ft_cmdclear(&(input->cmds), free);
 	}
