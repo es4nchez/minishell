@@ -68,7 +68,7 @@ sighandler_t signal(int signum, sighandler_t handler);
 void    ft_process(t_input *input, char *str, char **envp);
 char	*dir_name(void);
 char	*take_input(void);
-void	builtins(t_input *input, char **envp);
+void	execution(t_input *input, char **envp);
 void	handle_ctrl(int sig_nb);
 void	execve_threading(t_lstcmd *cmd, char **envp);
 void	print_env(char **envp);
@@ -88,6 +88,8 @@ void	ft_cmdadd_back(t_lstcmd **cmds, t_lstcmd *new);
 t_lstcmd	*ft_cmdnew(char *cmd, t_list *args);
 void	ft_cmdclear(t_lstcmd **lst, void (*del)(void *));
 char    *get_env(char *str, char **envp);
+int fd_process(int redi, int fd_io[], t_lstcmd *cmds);
+int check_redirect(t_lstcmd *cmds);
 
 //char    *dol_parse(char *str, char *envp);
 #endif

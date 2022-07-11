@@ -52,18 +52,16 @@ char	*cmd_exist(char *cmd, char *path)
 		free(tmp);
 	}
 	free(path);
-	free(cmd);
 	n = i;
 	i = -1;
 	while (paths[i + 1] && stat(paths[++i], &buff) != 0);
-	if (i == n)
+	if (i == n - 1)
+	{
+		printf("mishellout: command not found: %s\n", cmd + 1);
+		free(cmd);
 		return (NULL);
+	}
 	return (cmd_clean(paths, i));
-}
-
-void	cmd_not_found(char *cmd)
-{
-	printf("mishellout: command not found: %s\n", cmd);
 }
 
 char	**execve_arg(t_lstcmd *cmd, char **envp)
@@ -99,9 +97,8 @@ void	execve_threading(t_lstcmd *cmd, char **envp)
 	char	**argv;
 
 	argv = execve_arg(cmd, envp);
-	if (argv[0] == NULL)
+	if (argv == NULL || argv[0] == NULL)
 	{
-		cmd_not_found(argv[0]);
 		clear_tab(argv);
 		return ;
 	}

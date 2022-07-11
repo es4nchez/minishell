@@ -69,7 +69,7 @@ int main(int argc, char **argv, char **envp)
 		if (ft_strncmp(input->lineread, "", 1) == 0)
 			continue ;
 		else
-			builtins(input, env);
+			execution(input, env);
 		if (input->lineread)
 			ft_cmdclear(&(input->cmds), free);
 	}
