@@ -55,7 +55,7 @@ char	*cmd_exist(char *cmd, char *path)
 	free(cmd);
 	n = i;
 	i = -1;
-	while (stat(paths[++i], &buff) != 0);
+	while (paths[i + 1] && stat(paths[++i], &buff) != 0);
 	if (i == n)
 		return (NULL);
 	return (cmd_clean(paths, i));
