@@ -72,7 +72,9 @@ char    *sep(char **str, char c, char *set)
         (*str)++;
     }
     if (ft_isinset(c, "|<>"))
-            (*str)++;
+            (*str) += 1;
+    if (**str == c)
+            (*str) += 1;
     return (ft_substr(temp, 0, *str - temp));
 }
 

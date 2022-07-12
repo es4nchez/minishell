@@ -88,8 +88,9 @@ void	ft_cmdadd_back(t_lstcmd **cmds, t_lstcmd *new);
 t_lstcmd	*ft_cmdnew(char *cmd, t_list *args);
 void	ft_cmdclear(t_lstcmd **lst, void (*del)(void *));
 char    *get_env(char *str, char **envp);
-int fd_process(int redi, int fd_io[], t_lstcmd *cmds);
+int fd_process(int redi, t_lstcmd *cmds);
 int check_redirect(t_lstcmd *cmds);
+char	*get_next_line(int fd);
 
 //char    *dol_parse(char *str, char *envp);
 #endif

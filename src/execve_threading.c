@@ -92,8 +92,8 @@ char	**execve_arg(t_lstcmd *cmd, char **envp)
 
 void	execve_threading(t_lstcmd *cmd, char **envp)
 {
-	pid_t	pid;
-	int		status;
+	// pid_t	pid;
+	// int		status;
 	char	**argv;
 
 	argv = execve_arg(cmd, envp);
@@ -102,21 +102,21 @@ void	execve_threading(t_lstcmd *cmd, char **envp)
 		clear_tab(argv);
 		return ;
 	}
-	pid = fork();
-	if (pid == -1)
-	{
-		printf("Forking Error\n");
-		clear_tab(argv);
-		return ;
-	}
-	else if (pid == 0)
-	{
-		execve(argv[0], argv, envp);
-		clear_tab(argv);
-		return ;
-	}
-	else
-		wait(&status);
+	// pid = fork();
+	// if (pid == -1)
+	// {
+	// 	printf("Forking Error\n");
+	// 	clear_tab(argv);
+	// 	return ;
+	// }
+	// else if (pid == 0)
+	// {
+	execve(argv[0], argv, envp);
 	clear_tab(argv);
 	return ;
+	// }
+	// else
+	// 	wait(&status);
+	// clear_tab(argv);
+	// return ;
 }
