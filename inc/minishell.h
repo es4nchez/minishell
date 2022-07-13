@@ -31,17 +31,27 @@
 # include <time.h>
 # include <termios.h>
 
+typedef struct s_lstredi
+{
+    char                *redi;
+    struct s_lstredi    *next;
+    char                *file;
+}               t_lstredi;
+
 typedef struct s_lstcmd
 {
     char                *cmd;
     struct s_lstcmd     *next;
     t_list              *args;
+    t_lstredi           *redis;
 }               t_lstcmd;
 
 typedef struct s_input
 {
 	int				lstlen;
     char            *lineread;
+    int             fd_io[2];
+    int             pipe_fd[2];
 	t_lstcmd		*cmds;
 }				t_input;
 
@@ -87,10 +97,16 @@ char    *dol_parse(char *str, char **envp);
 void	ft_cmdadd_back(t_lstcmd **cmds, t_lstcmd *new);
 t_lstcmd	*ft_cmdnew(char *cmd, t_list *args);
 void	ft_cmdclear(t_lstcmd **lst, void (*del)(void *));
+t_lstredi    *ft_Redi_new(char *redi, char *file);
+void	ft_redis_clear(t_lstredi **lst, void (*del)(void *));
+void	ft_redis_add_back(t_lstredi **redis, t_lstredi *new);
 char    *get_env(char *str, char **envp);
-int fd_process(int redi, t_lstcmd *cmds);
-int check_redirect(t_lstcmd *cmds);
+int fd_process(int redi, t_lstredi *redis, int out);
+int check_redirect(t_lstredi *redis);
 char	*get_next_line(int fd);
+int pipe_process(t_lstcmd *cmds);
+void    pipe_w(t_input *input);
+void    pipe_r(t_input *input);
 
 //char    *dol_parse(char *str, char *envp);
 #endif

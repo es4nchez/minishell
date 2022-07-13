@@ -87,11 +87,24 @@ char    *rm_quote(char *s)
     return (temp);
 }
 
+void    string_clean(char **s, char **envp)
+{
+    char    *temp;
+
+    if (ft_strchr(*s,'$') && (*s)[0] != '\'')
+    {
+        temp = dol_parse(*s, envp);
+        free(*s);
+        *s = temp;
+    }
+    if (*s && ((*s)[0] == '\'' || (*s)[0] == '"'))
+        *s = rm_quote(*s);
+}
+
 t_list    *ft_pars_arg(char **str, char **envp)
 {
     t_list  *ret;
     t_list  *tmp;
-    char    *temp;
     char    *s;
 
     skip_space(str);
@@ -99,14 +112,7 @@ t_list    *ft_pars_arg(char **str, char **envp)
     while(!ft_isinset(**str, "|<> "))
     {
         s = sep(str, **str, "|<> ");
-        if (ft_strchr(s,'$') && s[0] != '\'')
-        {
-            temp = dol_parse(s, envp);
-            free(s);
-            s = temp;
-        }
-        if (s && (s[0] == '\'' || s[0] == '"'))
-            s = rm_quote(s);
+        string_clean(&s, envp);
         ft_lstadd_back(&ret, ft_lstnew(s));
         skip_space(str);
     }
@@ -116,33 +122,55 @@ t_list    *ft_pars_arg(char **str, char **envp)
     return (ret);
 }
 
+t_lstredi    *ft_pars_redi(char **str, char **envp)
+{
+    t_lstredi   *redis;
+    t_lstredi   *tmp;
+    char        *redi;
+    char        *file;
+
+    redis = ft_Redi_new(NULL, NULL);
+    skip_space(str);
+    while(**str && ft_isinset(**str, "<>"))
+    {
+        redi = sep(str, **str, "<>");
+        skip_space(str);
+        file = sep(str, **str, "|<> ");
+        string_clean(&file, envp);
+        ft_redis_add_back(&redis, ft_Redi_new(redi, file));
+        skip_space(str);
+    }
+    tmp = redis->next;
+    free(redis);
+    redis = tmp;
+    return (redis);
+}
+
 t_lstcmd    *ft_pars_cmd(char **str, char **envp)
 {
     t_lstcmd    *cmd;
-    char    *temp;
 
 	cmd = malloc(sizeof(t_lstcmd));
     skip_space(str);
     cmd->next = NULL;
     if (**str == '|')
         cmd->cmd = sep(str, **str, "|");
-    else if (**str == '<')
-        cmd->cmd = sep(str, **str, "<");
-    else if (**str == '>')
-        cmd->cmd = sep(str, **str, ">");
     else
     {
         cmd->cmd = sep(str, **str, "|>< ");
-        cmd->args = ft_pars_arg(str, envp);
-        if (ft_strchr(cmd->cmd,'$') && cmd->cmd[0] != '\'')
+        skip_space(str);
+        while (**str && **str != '|')
         {
-            temp = dol_parse(cmd->cmd, envp);
-            free(cmd->cmd);
-            cmd->cmd = temp;
+            cmd->args = ft_pars_arg(str, envp);
+            skip_space(str);
+            cmd->redis = ft_pars_redi(str, envp);
+            skip_space(str);
         }
+        string_clean(&(cmd->cmd), envp);
         return (cmd);
     }
     cmd->args = ft_lstnew(NULL);
+    cmd->redis = ft_Redi_new(NULL, NULL);
     return (cmd);
 }
 

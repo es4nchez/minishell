@@ -22,7 +22,7 @@ int heredoc_listener(char *delimiter, int fd_out)
 	return (0);
 }
 
-int heredoc(t_lstcmd *cmd)
+int heredoc(t_lstredi *redis)
 {
 	int	fd_io[2];
 
@@ -31,65 +31,75 @@ int heredoc(t_lstcmd *cmd)
 		perror("minishell: pipe: ");
 		return (-1);
 	}
-    if (heredoc_listener(cmd->next->cmd, fd_io[1]))
+    if (heredoc_listener(redis->file, fd_io[1]))
 		return (-1);
 	close(fd_io[1]);
 	return (fd_io[0]);
 }
 
-int fd_process(int redi, t_lstcmd *cmds)
+void    pipe_w(t_input *input)
+{
+	close(input->pipe_fd[1]);
+	dup2(input->pipe_fd[0], STDIN_FILENO);
+}
+
+void    pipe_r(t_input *input)
+{
+	close(input->pipe_fd[0]);
+    dup2(input->pipe_fd[1], STDOUT_FILENO);
+}
+
+int fd_process(int redi, t_lstredi *redis, int out)
 {
     int fd;
+    int fd_temp;
 
-    if (redi == 1 && cmds->next->next)
+    if (redi == 1 && redis)
     {
-        fd = open(cmds->next->next->cmd, O_RDONLY);
+        fd = open(redis->file, O_RDONLY);
         if (dup2(fd, STDIN_FILENO) == -1)
             return (1);
         close(fd);
     }
-    else if (redi == 2 && cmds->next->next)
+    else if (redi == 2 && redis)
     {
-        fd = heredoc(cmds->next);
+        fd_temp = dup(STDOUT_FILENO);
+        dup2(out, STDOUT_FILENO);
+        fd = heredoc(redis);
+        dup2(fd_temp, STDOUT_FILENO);
         if (dup2(fd, STDIN_FILENO) == -1)
             return (1);
         close(fd);
     }
-    else if (redi == 3 && cmds->next->next)
+    else if (redi == 3 && redis)
     {
-        fd = open(cmds->next->next->cmd,  O_RDWR | O_CREAT | O_TRUNC, 0644);
+        fd = open(redis->file,  O_RDWR | O_CREAT | O_TRUNC, 0644);
         if (dup2(fd, STDOUT_FILENO) == -1)
             return (1);
         close(fd);
     }
-    else if (redi == 4 && cmds->next->next)
+    else if (redi == 4 && redis)
     {
-        fd = open(cmds->next->next->cmd, O_RDWR | O_CREAT | O_APPEND, 0644);
+        fd = open(redis->file, O_RDWR | O_CREAT | O_APPEND, 0644);
         if (dup2(fd, STDOUT_FILENO) == -1)
             return (1);
         close(fd);
-    }
-    else if (redi == 5 && cmds->next->next)
-    {
-        
     }
     return (0);
 }
 
-int check_redirect(t_lstcmd *cmds)
+int check_redirect(t_lstredi *redis)
 {
-    if (cmds->next)
+    if (redis != NULL)
     {
-        if (!ft_strncmp(cmds->next->cmd, "<<", 3))
+        if (redis->redi && !ft_strncmp(redis->redi, "<<", 3))
             return (2);
-        if (!ft_strncmp(cmds->next->cmd, "<", 2))
+        if (redis->redi && !ft_strncmp(redis->redi, "<", 2))
             return (1);
-        if (!ft_strncmp(cmds->next->cmd, ">>", 3))
+        if (redis->redi && !ft_strncmp(redis->redi, ">>", 3))
             return (4);
-        if (!ft_strncmp(cmds->next->cmd, ">", 2))
+        if (redis->redi && !ft_strncmp(redis->redi, ">", 2))
             return (3);
-        if (!ft_strncmp(cmds->next->cmd, "|", 2))
-            return (5);
     }
     else
         return (-1);

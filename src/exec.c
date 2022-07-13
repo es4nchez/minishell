@@ -20,7 +20,7 @@ void	builtins(t_lstcmd *cmds, char **envp)
 		bt_echo(cmds);
 	else if (!ft_strncmp(cmds->cmd, "cd", 2));
 	 	//bt_cd(envp, ft_split(lineread, ' ')[1]);
-	else if (!ft_strncmp(cmds->cmd, "exit", 4));
+	//else if (!ft_strncmp(cmds->cmd, "exit", 4));
 		//bt_exit(input);
 	else if (!ft_strncmp(cmds->cmd, "pwd", 3))
 		bt_pwd(envp);
@@ -38,26 +38,44 @@ void	builtins(t_lstcmd *cmds, char **envp)
 void	execution(t_input *input, char **envp)
 {
 	t_lstcmd	*cmds;
+	t_lstredi	*redis;
 	int			redi;
 	pid_t		pid;
 
 	cmds = input->cmds;
 	while (cmds)
 	{
-		redi = 0;
-		redi = check_redirect(cmds);
+		redi = -1;
+		if (cmds->redis != NULL)
+			redis = cmds->redis;
+		redi = check_redirect(redis);
+		if (pipe(input->pipe_fd) == -1)
+			return ;
 		pid = fork();
 		if (pid == 0)
 		{
-			if (redi > 0)
-				fd_process(redi, cmds);
+			while (redi > 0 && redi < 5 && redis)
+			{
+				if (redi > 0)
+					fd_process(redi, redis, input->fd_io[0]);
+				redis = redis->next;
+				redi = check_redirect(redis);
+			}
+			if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
+        		pipe_r(input);
 			builtins(cmds, envp);
 		}
 		else
-			wait(NULL);
-		if (redi != -1 && !cmds->next->next)
+		{
+			if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
+				pipe_w(input);
+			waitpid(pid, NULL, 0);	
+		}
+		if (cmds->next && cmds->next->next)
 			cmds = cmds->next->next;
 		else
 			cmds = NULL;
 	}
+    dup2(input->fd_io[0], STDOUT_FILENO);
+    dup2(input->fd_io[1], STDIN_FILENO);
 }
