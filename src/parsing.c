@@ -151,6 +151,8 @@ t_lstcmd    *ft_pars_cmd(char **str, char **envp)
     t_lstcmd    *cmd;
 
 	cmd = malloc(sizeof(t_lstcmd));
+    cmd->redi_init = 0;
+    cmd->arg_init = 0;
     skip_space(str);
     cmd->next = NULL;
     if (**str == '|')
@@ -162,8 +164,12 @@ t_lstcmd    *ft_pars_cmd(char **str, char **envp)
         while (**str && **str != '|')
         {
             cmd->args = ft_pars_arg(str, envp);
+            if (cmd->args)
+                cmd->arg_init = 1;
             skip_space(str);
             cmd->redis = ft_pars_redi(str, envp);
+            if (cmd->redis)
+                cmd->redi_init = 1;
             skip_space(str);
         }
         string_clean(&(cmd->cmd), envp);

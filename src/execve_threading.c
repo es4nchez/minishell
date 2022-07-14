@@ -54,7 +54,9 @@ char	*cmd_exist(char *cmd, char *path)
 	free(path);
 	n = i;
 	i = -1;
-	while (paths[i + 1] && stat(paths[++i], &buff) != 0);
+	if (stat(cmd + 1, &buff) == 0)
+		return (cmd);
+	while (paths[i + 1] && stat(paths[++i], &buff));
 	if (i == n - 1)
 	{
 		printf("mishellout: command not found: %s\n", cmd + 1);
@@ -72,7 +74,7 @@ char	**execve_arg(t_lstcmd *cmd, char **envp)
 
 	i = 1;
 	arg = cmd->args;
-	while(arg)
+	while(cmd->arg_init && arg)
 	{
 		i++;
 		arg = arg->next;
@@ -81,7 +83,7 @@ char	**execve_arg(t_lstcmd *cmd, char **envp)
 	ret[0] = cmd_exist(ft_strjoin("/", cmd->cmd), get_env("$PATH", envp));
 	arg = cmd->args;
 	i = 1;
-	while(arg)
+	while(cmd->arg_init && arg)
 	{
 		ret[i++] = ft_strdup(arg->content);
 		arg = arg->next;

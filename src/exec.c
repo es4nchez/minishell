@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	builtins(t_lstcmd *cmds, char **envp)
+void	builtins(t_input *input, t_lstcmd *cmds, char **envp)
 {
 	if (!cmds || !cmds->cmd)
 		return ;
@@ -20,8 +20,8 @@ void	builtins(t_lstcmd *cmds, char **envp)
 		bt_echo(cmds);
 	else if (!ft_strncmp(cmds->cmd, "cd", 2));
 	 	//bt_cd(envp, ft_split(lineread, ' ')[1]);
-	//else if (!ft_strncmp(cmds->cmd, "exit", 4));
-		//bt_exit(input);
+	else if (!ft_strncmp(cmds->cmd, "exit", 4))
+		bt_exit(input);
 	else if (!ft_strncmp(cmds->cmd, "pwd", 3))
 		bt_pwd(envp);
 	else if (!ft_strncmp(cmds->cmd, "env", 3))
@@ -46,9 +46,11 @@ void	execution(t_input *input, char **envp)
 	while (cmds)
 	{
 		redi = -1;
-		if (cmds->redis != NULL)
+		if (cmds->redi_init)
+		{
 			redis = cmds->redis;
-		redi = check_redirect(redis);
+			redi = check_redirect(redis);
+		}
 		if (pipe(input->pipe_fd) == -1)
 			return ;
 		pid = fork();
@@ -63,13 +65,17 @@ void	execution(t_input *input, char **envp)
 			}
 			if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
         		pipe_r(input);
-			builtins(cmds, envp);
+			builtins(input, cmds, envp);
 		}
 		else
 		{
+			wait(&pid);
+			if (!cmds->next && !ft_strncmp(cmds->cmd, "exit", 4))
+				exit(0);
+			else if (cmds->next && !ft_strncmp(cmds->cmd, "exit", 4)) 
+				break ;
 			if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
 				pipe_w(input);
-			waitpid(pid, NULL, 0);	
 		}
 		if (cmds->next && cmds->next->next)
 			cmds = cmds->next->next;

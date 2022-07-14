@@ -44,6 +44,8 @@ typedef struct s_lstcmd
     struct s_lstcmd     *next;
     t_list              *args;
     t_lstredi           *redis;
+    int                 redi_init;
+    int                 arg_init;
 }               t_lstcmd;
 
 typedef struct s_input
@@ -52,6 +54,7 @@ typedef struct s_input
     char            *lineread;
     int             fd_io[2];
     int             pipe_fd[2];
+    int             exit;
 	t_lstcmd		*cmds;
 }				t_input;
 

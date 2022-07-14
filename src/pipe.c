@@ -12,7 +12,7 @@ int heredoc_listener(char *delimiter, int fd_out)
 		str = get_next_line(0);
 		if (!str)
 			return (1);
-		if (!ft_strncmp(str, delimiter, ft_strlen(str)))
+		if (ft_strlen(str) == ft_strlen(delimiter) && !ft_strncmp(str, delimiter, ft_strlen(str)))
 			break ;
 		ft_putstr_fd(str, fd_out);
 		ft_putstr_fd("\n", fd_out);
