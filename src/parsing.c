@@ -71,10 +71,12 @@ char    *sep(char **str, char c, char *set)
             get_quote(str, **str);
         (*str)++;
     }
-    if (ft_isinset(c, "|<>"))
+    if (**str && ft_isinset(c, "|<>"))
+    {
+        (*str) += 1;
+        if (**str == c)
             (*str) += 1;
-    if (**str == c)
-            (*str) += 1;
+    }
     return (ft_substr(temp, 0, *str - temp));
 }
 

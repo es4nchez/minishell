@@ -63,6 +63,7 @@ char	*cmd_exist(char *cmd, char *path)
 		free(cmd);
 		return (NULL);
 	}
+	free(cmd);
 	return (cmd_clean(paths, i));
 }
 

@@ -59,7 +59,8 @@ void	execution(t_input *input, char **envp)
 			while (redi > 0 && redi < 5 && redis)
 			{
 				if (redi > 0)
-					fd_process(redi, redis, input->fd_io[0]);
+					if (fd_process(redi, redis, input->fd_io[0]))
+						exit(printf("mishellout: %s: no such file or directory\n", redis->file));
 				redis = redis->next;
 				redi = check_redirect(redis);
 			}

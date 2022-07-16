@@ -57,6 +57,8 @@ int fd_process(int redi, t_lstredi *redis, int out)
     if (redi == 1 && redis)
     {
         fd = open(redis->file, O_RDONLY);
+        if (fd == -1)
+            return (1);
         if (dup2(fd, STDIN_FILENO) == -1)
             return (1);
         close(fd);
@@ -74,6 +76,8 @@ int fd_process(int redi, t_lstredi *redis, int out)
     else if (redi == 3 && redis)
     {
         fd = open(redis->file,  O_RDWR | O_CREAT | O_TRUNC, 0644);
+        if (fd == -1)
+            return (1);
         if (dup2(fd, STDOUT_FILENO) == -1)
             return (1);
         close(fd);
@@ -81,6 +85,8 @@ int fd_process(int redi, t_lstredi *redis, int out)
     else if (redi == 4 && redis)
     {
         fd = open(redis->file, O_RDWR | O_CREAT | O_APPEND, 0644);
+        if (fd == -1)
+            return (1);
         if (dup2(fd, STDOUT_FILENO) == -1)
             return (1);
         close(fd);
