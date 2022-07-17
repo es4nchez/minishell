@@ -84,5 +84,7 @@ void	execution(t_input *input, char **envp)
 			cmds = NULL;
 	}
     dup2(input->fd_io[0], STDOUT_FILENO);
+	close(input->pipe_fd[0]);
     dup2(input->fd_io[1], STDIN_FILENO);
+	close(input->pipe_fd[1]);
 }

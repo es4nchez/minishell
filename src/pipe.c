@@ -58,7 +58,7 @@ int fd_process(int redi, t_lstredi *redis, int out)
     {
         fd = open(redis->file, O_RDONLY);
         if (fd == -1)
-            return (1);
+        return (1);
         if (dup2(fd, STDIN_FILENO) == -1)
             return (1);
         close(fd);
