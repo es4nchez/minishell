@@ -49,6 +49,8 @@ void    bt_echo(t_lstcmd *cmds)
     t_list  *temp;
     int     nl;
 
+    if (!cmds->arg_init)
+        exit(1);
     temp = cmds->args;
     nl = get_option(temp, 'n');
     if (!temp)
