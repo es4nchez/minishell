@@ -54,6 +54,7 @@ typedef struct s_input
     char            *lineread;
     int             fd_io[2];
     int             pipe_fd[2];
+    pid_t           pid;
     int             exit;
 	t_lstcmd		*cmds;
 }				t_input;
@@ -110,6 +111,10 @@ char	*get_next_line(int fd);
 int pipe_process(t_lstcmd *cmds);
 void    pipe_w(t_input *input);
 void    pipe_r(t_input *input);
+void	reset_fds(t_input *input);
+void	close_fds(t_input *input);
+void	reset_std(t_input *input);
+void	ft_close(int fd);
 
 //char    *dol_parse(char *str, char *envp);
 #endif
