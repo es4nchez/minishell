@@ -86,7 +86,7 @@ char	**execve_arg(t_lstcmd *cmd, char **envp)
 	i = 1;
 	while(cmd->arg_init && arg)
 	{
-		ret[i] = ft_strdup(arg->content);
+		ret[i++] = ft_strdup(arg->content);
 		arg = arg->next;
 	}
 	ret[i] = NULL;

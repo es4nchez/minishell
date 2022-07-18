@@ -40,7 +40,6 @@ void	execution(t_input *input, char **envp)
 	t_lstcmd	*cmds;
 	t_lstredi	*redis;
 	int			redi;
-	pid_t		pid;
 
 	cmds = input->cmds;
 	while (cmds)
@@ -53,8 +52,8 @@ void	execution(t_input *input, char **envp)
 		}
 		if (pipe(input->pipe_fd) == -1)
 			return ;
-		pid = fork();
-		if (pid == 0)
+		input->pid = fork();
+		if (input->pid == 0)
 		{
 			while (redi > 0 && redi < 5 && redis)
 			{
@@ -70,21 +69,20 @@ void	execution(t_input *input, char **envp)
 		}
 		else
 		{
-			wait(&pid);
 			if (!cmds->next && !ft_strncmp(cmds->cmd, "exit", 4))
 				exit(0);
 			else if (cmds->next && !ft_strncmp(cmds->cmd, "exit", 4)) 
 				break ;
 			if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
 				pipe_w(input);
+			reset_std(input);
+			close_fds(input);
+    		wait(&input->pid);
 		}
 		if (cmds->next && cmds->next->next)
 			cmds = cmds->next->next;
 		else
 			cmds = NULL;
 	}
-    dup2(input->fd_io[0], STDOUT_FILENO);
-	close(input->pipe_fd[0]);
-    dup2(input->fd_io[1], STDIN_FILENO);
-	close(input->pipe_fd[1]);
+	//reset_fds(input);
 }
