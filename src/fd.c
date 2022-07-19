@@ -9,7 +9,9 @@ void	ft_close(int fd)
 void	reset_std(t_input *input)
 {
 	dup2(input->fd_io[0], STDOUT_FILENO);
+    ft_close(input->fd_io[0]);
 	dup2(input->fd_io[1], STDIN_FILENO);
+    ft_close(input->fd_io[1]);
 }
 
 void	close_fds(t_input *input)
@@ -20,6 +22,8 @@ void	close_fds(t_input *input)
 
 void	reset_fds(t_input *input)
 {
+	input->fd_io[0] = -1;
+	input->fd_io[1] = -1;
 	input->pipe_fd[0] = -1;
 	input->pipe_fd[1] = -1;
     input->pid = -1;

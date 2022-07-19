@@ -177,8 +177,6 @@ t_lstcmd    *ft_pars_cmd(char **str, char **envp)
         string_clean(&(cmd->cmd), envp);
         return (cmd);
     }
-    cmd->args = ft_lstnew(NULL);
-    cmd->redis = ft_Redi_new(NULL, NULL);
     return (cmd);
 }
 

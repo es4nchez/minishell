@@ -32,7 +32,6 @@ void	builtins(t_input *input, t_lstcmd *cmds, char **envp)
 		//bt_unset(envp, lineread);
 	else
 	 	execve_threading(cmds, envp);
-	exit(0);
 }
 
 void	execution(t_input *input, char **envp)
@@ -40,7 +39,9 @@ void	execution(t_input *input, char **envp)
 	t_lstcmd	*cmds;
 	t_lstredi	*redis;
 	int			redi;
+	int			nb_cmd;
 
+	nb_cmd = 0;
 	cmds = input->cmds;
 	while (cmds)
 	{
@@ -75,14 +76,16 @@ void	execution(t_input *input, char **envp)
 				break ;
 			if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
 				pipe_w(input);
-			reset_std(input);
 			close_fds(input);
-    		wait(&input->pid);
+			nb_cmd++;
 		}
 		if (cmds->next && cmds->next->next)
 			cmds = cmds->next->next;
 		else
 			cmds = NULL;
 	}
-	//reset_fds(input);
+	while (nb_cmd-- > 0)
+    	wait(&input->pid);
+	reset_std(input);
+	reset_fds(input);
 }

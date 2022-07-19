@@ -45,7 +45,10 @@ void	ft_cmdclear(t_lstcmd **lst, void (*del)(void *))
             	free((*lst)->args);
 			}
 			if ((*lst)->redi_init)
+			{
 				ft_redis_clear(&((*lst)->redis), free);
+				free((*lst)->redis);
+			}
 			ft_cmddelone(*lst, del);
 			(*lst) = tmp;
 		}
