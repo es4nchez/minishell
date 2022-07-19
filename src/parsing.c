@@ -114,6 +114,7 @@ t_list    *ft_pars_arg(char **str, char **envp)
     while(!ft_isinset(**str, "|<> "))
     {
         s = sep(str, **str, "|<> ");
+        printf("%s\n", s);
         string_clean(&s, envp);
         ft_lstadd_back(&ret, ft_lstnew(s));
         skip_space(str);

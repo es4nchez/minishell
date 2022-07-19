@@ -43,7 +43,6 @@ int	rm_env(char ***envp, int n)
 int	set_env(char ***envp, char *var, char *content)
 {
 	int i;
-	int	len;
 	char	*tmp;
 
 	i = 0;
