@@ -19,7 +19,7 @@ char    *concat_strvar(char *str, char *var, int loc)
     while (i < loc)
         res[i++] = str[j++];
     j = 0;
-    while (var[j])
+    while (var && var[j])
         res[i++] = var[j++];
     j = 0;
     while (str[loc + end + j])
@@ -61,7 +61,8 @@ char    *get_env(char *str, char **envp)
     var = get_var(str);
     if (!var)
         return (NULL);
-    while (envp[i] && ft_strncmp(envp[i], var, len_equal(envp[i])) != 0)
+    while (envp[i] && (ft_strncmp(envp[i], var, len_equal(envp[i])) != 0 
+        || ft_strncmp(envp[i], var, ft_strlen(var)) != 0))
         i++;
     if (envp[i] == NULL)
         return (NULL);
@@ -81,21 +82,15 @@ char    *dol_parse(char *str, char **envp)
     char    *var;
     char    *res;
 
-    if (*str == '"')
+    temp = ft_strchr(str, '$');
+    res = str;
+    while (temp)
     {
-        temp = ft_strchr(str, '$');
-        res = str;
-        while (temp)
-        {
-            var = get_env(temp, envp);
-            if (!var)
-                return (NULL);
-            res = concat_strvar(res, var, temp - res);
-            temp = ft_strchr(res, '$');
-            if (var)
-                free(var);
-        }
-        return (res);
+        var = get_env(temp, envp);
+        res = concat_strvar(res, var, temp - res);
+        temp = ft_strchr(res, '$');
+        if (var)
+            free(var);
     }
-    return (get_env(str, envp));
+    return (res);
 }

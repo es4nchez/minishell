@@ -77,7 +77,7 @@ void	execution(t_input *input, char **envp)
 			if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
 				pipe_w(input);
 			close_fds(input);
-			close(STDIN_FILENO);
+			//close(STDIN_FILENO);
 			nb_cmd++;
 		}
 		if (cmds->next && cmds->next->next)

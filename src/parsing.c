@@ -83,24 +83,58 @@ char    *sep(char **str, char c, char *set)
 char    *rm_quote(char *s)
 {
     char    *temp;
+    char    *ret;
+    char    quote;
+    int     i;
 
-    temp = ft_substr(s, 1, ft_strlen(s) - 2);
+    i = 0;
+    while (s[i] && s[i] != '\'' && s[i] != '"')
+        i++;
+    if (s[i] == '\0')
+        return (s);
+    quote = s[i];
+    temp = ft_substr(s, 0, i);
+    ret = ft_substr(s, i + 1, ft_strlen(s + i + 1));
     free(s);
-    return (temp);
+    s = ft_strjoin(temp, ret);
+    free(temp);
+    free(ret);
+    i = ft_strrchr(s, quote) - s;
+    temp = ft_substr(s, 0, i);
+    ret = ft_substr(s, i + 1, ft_strlen(s + i + 1));
+    free(s);
+    s = ft_strjoin(temp, ret);
+    free(temp);
+    free(ret);
+    return (s);
 }
 
 void    string_clean(char **s, char **envp)
 {
     char    *temp;
+    int     i;
 
-    if (ft_strchr(*s,'$') && (*s)[0] != '\'')
+    i = -1;
+    while ((*s)[++i])
     {
-        temp = dol_parse(*s, envp);
-        free(*s);
-        *s = temp;
+        if ((*s)[i] == '$')
+        {
+                temp = dol_parse(*s, envp);
+                free(*s);
+                *s = temp;
+                return ;
+        }
+        if ((*s)[i] == '\"')
+        {
+            if (ft_strchr(&(*s)[i],'$'))
+            {
+                temp = dol_parse(*s, envp);
+                free(*s);
+                *s = temp;
+            }
+        }
     }
-    if (*s && ((*s)[0] == '\'' || (*s)[0] == '"'))
-        *s = rm_quote(*s);
+    *s = rm_quote(*s);
 }
 
 t_list    *ft_pars_arg(char **str, char **envp)
@@ -114,8 +148,9 @@ t_list    *ft_pars_arg(char **str, char **envp)
     while(!ft_isinset(**str, "|<> "))
     {
         s = sep(str, **str, "|<> ");
-        printf("%s\n", s);
+        printf("avant :%s\n", s);
         string_clean(&s, envp);
+        printf("apres :%s\n", s);
         ft_lstadd_back(&ret, ft_lstnew(s));
         skip_space(str);
     }
