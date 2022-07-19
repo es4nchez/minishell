@@ -115,6 +115,7 @@ void	reset_fds(t_input *input);
 void	close_fds(t_input *input);
 void	reset_std(t_input *input);
 void	ft_close(int fd);
+int len_equal(char *str);
 
 //char    *dol_parse(char *str, char *envp);
 #endif

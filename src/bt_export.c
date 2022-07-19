@@ -12,6 +12,59 @@
 
 #include "minishell.h"
 
+int	rm_env(char ***envp, int n)
+{
+	int	i;
+	int	len;
+	char	*tmp;
+
+	i = 0;
+	if ((*envp)[n] == NULL)
+		return (1);
+	while ((*envp)[i])
+		i++;
+	len = i;
+	tmp  = ft_strdup((*envp)[len]);
+	free((*envp)[i]);
+	free((*envp)[n]);
+	envp = ft_realloc(*envp, len - 1);
+	if (!envp)
+		return (1);
+	i = -1;
+	while ((*(*envp)[n]))
+	{
+		(*envp)[n] = (*envp)[n + 1];
+		n++;
+	}
+	(*envp)[n] = tmp;
+	return (0);
+}
+
+int	set_env(char ***envp, char *var, char *content)
+{
+	int i;
+	int	len;
+	char	*tmp;
+
+	i = 0;
+	if (!envp || !var)
+		return (1);
+	while ((*envp)[i] && ft_strncmp((*envp)[i], var, len_equal((*envp)[i])) != 0)
+		i++;
+	if (!content)
+		return (rm_env(envp, i));
+	if ((*envp)[i] == NULL)
+		envp = ft_realloc(*envp, ++i);
+	tmp = ft_strjoin(var, "=");
+	free(var);
+	var = ft_strjoin(tmp, content);
+	free(tmp);
+	free(content);
+	free((*envp)[i]);
+	(*envp)[i] = var;
+	return (0);
+}
+
 void	change_variable(char **envp, int arg_nb, char *env_arg, char *env_val)
 {
 	envp[arg_nb] = ft_substr(envp[arg_nb], 0, ft_strlen(env_arg) + 1);
