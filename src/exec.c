@@ -40,8 +40,10 @@ void	execution(t_input *input, char **envp)
 	t_lstredi	*redis;
 	int			redi;
 	int			nb_cmd;
+	int			oldin;
 
 	nb_cmd = 0;
+	oldin = 0;
 	cmds = input->cmds;
 	while (cmds)
 	{
@@ -51,8 +53,16 @@ void	execution(t_input *input, char **envp)
 			redis = cmds->redis;
 			redi = check_redirect(redis);
 		}
-		if (pipe(input->pipe_fd) == -1)
-			return ;
+		if (cmds->next)
+		{
+			if (pipe(input->pipe_fd) == -1)
+				return ;
+		}
+		else
+		{
+			input->pipe_fd[0] = 0;
+			input->pipe_fd[1] = 1;
+		}
 		input->pid = fork();
 		if (input->pid == 0)
 		{
@@ -64,8 +74,9 @@ void	execution(t_input *input, char **envp)
 				redis = redis->next;
 				redi = check_redirect(redis);
 			}
+			oldin = input->pipe_fd[0];
 			if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
-        		pipe_r(input);
+        		pipe_r(input, &oldin);
 			builtins(input, cmds, envp);
 		}
 		else
@@ -75,9 +86,7 @@ void	execution(t_input *input, char **envp)
 			else if (cmds->next && !ft_strncmp(cmds->cmd, "exit", 4)) 
 				break ;
 			if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
-				pipe_w(input);
-			close_fds(input);
-			//close(STDIN_FILENO);
+				pipe_w(input, &oldin);
 			nb_cmd++;
 		}
 		if (cmds->next && cmds->next->next)
@@ -88,5 +97,6 @@ void	execution(t_input *input, char **envp)
 	while (nb_cmd-- > 0)
     	wait(&input->pid);
 	reset_std(input);
+	ft_close(input->pipe_fd[0]);
 	reset_fds(input);
 }

@@ -25,8 +25,8 @@ static void	init_input(t_input **input)
 {
 	*input = (t_input *)malloc(sizeof(t_input));
 	(*input)->lstlen = 0;
-	(*input)->fd_io[0] = dup(STDOUT_FILENO);
-	(*input)->fd_io[1] = dup(STDIN_FILENO);
+	(*input)->fd_io[1] = dup(STDOUT_FILENO);
+	(*input)->fd_io[0] = dup(STDIN_FILENO);
 	(*input)->exit = 0;
 
 }

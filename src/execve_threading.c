@@ -59,6 +59,10 @@ char	*cmd_exist(char *cmd, char *path)
 	while (paths[i + 1] && stat(paths[++i], &buff));
 	if (i == n - 1)
 	{
+		i = -1;
+		while (paths[++i])
+			free(paths[i]);
+		free(paths);
 		printf("mishellout: command not found: %s\n", cmd + 1);
 		free(cmd);
 		return (NULL);
