@@ -57,7 +57,7 @@ void    get_quote(char **str, char copen)
     while (**str != '\0' && **str != copen)
         (*str)++;
     if (**str == '\0')
-        return ;                         //TODO : error quote non fermee
+        return ;
 }
 
 char    *sep(char **str, char c, char *set)
@@ -126,6 +126,8 @@ void    string_clean(char **s, char **envp)
         return ;
     while ((*s)[++i])
     {
+        if ((*s)[i] == '\'')
+            while ((*s)[++i] != '\0' && (*s)[i] != '\'');
         if ((*s)[i] == '$')
         {
                 temp = dol_parse(*s, envp);

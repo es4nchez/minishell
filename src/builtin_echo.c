@@ -50,14 +50,12 @@ void    bt_echo(t_lstcmd *cmds)
     int     nl;
 
     if (!cmds->arg_init)
-        exit(1);
-    temp = cmds->args;
-    nl = get_option(temp, 'n');
-    if (!temp)
     {
         write(1, "\n", 1);
-        return ;
+        exit(0);
     }
+    temp = cmds->args;
+    nl = get_option(temp, 'n');
     if (nl)
         bt_echo_print(temp);
     else
