@@ -59,7 +59,7 @@ void	execution(t_input *input, char **envp)
 	nb_cmd = 0;
 	oldin = 0;
 	cmds = input->cmds;
-	while (cmds)
+	while (cmds && cmds->cmd)
 	{
 		redi = -1;
 		if (cmds->redi_init)
@@ -97,9 +97,9 @@ void	execution(t_input *input, char **envp)
 		else
 		{
     		oldin = STDIN_FILENO;
-			if (!cmds->next && !ft_strncmp(cmds->cmd, "exit", 4))
+			if (cmds && !cmds->next && !ft_strncmp(cmds->cmd, "exit", 4))
 				exit(0);
-			else if (cmds->next && !ft_strncmp(cmds->cmd, "exit", 4)) 
+			else if (cmds && cmds->next && !ft_strncmp(cmds->cmd, "exit", 4)) 
 				break ;
 			if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
 				pipe_w(input, &oldin);
