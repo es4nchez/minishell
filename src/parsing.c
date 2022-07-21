@@ -57,7 +57,7 @@ void    get_quote(char **str, char copen)
     while (**str != '\0' && **str != copen)
         (*str)++;
     if (**str == '\0')
-        return ;                              //TODO : error quote non fermee
+        return ;                         //TODO : error quote non fermee
 }
 
 char    *sep(char **str, char c, char *set)
@@ -68,7 +68,14 @@ char    *sep(char **str, char c, char *set)
     while(**str && !ft_isinset(**str, set))
     {
         if (**str == '"' || **str == '\'')
+        {
             get_quote(str, **str);
+            if (**str == '\0')
+            {
+                printf("mishellout: quote not closed\n");
+                return (NULL);
+            }
+        }
         (*str)++;
     }
     if (**str && ft_isinset(c, "|<>"))
@@ -115,6 +122,8 @@ void    string_clean(char **s, char **envp)
     int     i;
 
     i = -1;
+    if (!*s)
+        return ;
     while ((*s)[++i])
     {
         if ((*s)[i] == '$')

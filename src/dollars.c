@@ -12,6 +12,8 @@ char    *concat_strvar(char *str, char *var, int loc)
     j = 0;
     while (ft_isalnum(str[loc + i]) || str[loc + i] == '_')
         i++;
+    if (i == 1 && str[loc + i] == '?')
+        i++;
     end = i;
     len = ft_strlen(str) + ft_strlen(var) - i;
     i = 0;
@@ -58,6 +60,8 @@ char    *get_env(char *str, char **envp)
     char    *var;
 
     i = 0;
+    if (!ft_strncmp(str, "$?", 2))
+        return (ft_itoa(g_retcmd));
     var = get_var(str);
     if (!var)
         return (NULL);

@@ -17,8 +17,3 @@ void	close_fds(t_input *input)
 	ft_close(input->pipe_fd[0]);
 	ft_close(input->pipe_fd[1]);
 }
-
-void	reset_fds(t_input *input)
-{
-    input->pid = -1;
-}

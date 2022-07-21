@@ -39,16 +39,18 @@ int heredoc(t_lstredi *redis)
 
 void    pipe_w(t_input *input, int  *oldin)
 {
+    (void)oldin;
 	close(input->pipe_fd[1]);
 	dup2(input->pipe_fd[0], STDIN_FILENO);
-	ft_close(*oldin);
+	ft_close(input->pipe_fd[0]);
 }
 
 void    pipe_r(t_input *input, int  *oldin)
 {
+    (void)oldin;
 	close(input->pipe_fd[0]);
     dup2(input->pipe_fd[1], STDOUT_FILENO);
-	input->pipe_fd[0] = *oldin;
+	ft_close(input->pipe_fd[1]);
 }
 
 int fd_process(int redi, t_lstredi *redis, int out)

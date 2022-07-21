@@ -65,7 +65,7 @@ char	*cmd_exist(char *cmd, char *path)
 		free(paths);
 		printf("mishellout: command not found: %s\n", cmd + 1);
 		free(cmd);
-		return (NULL);
+		exit(127);
 	}
 	free(cmd);
 	return (cmd_clean(paths, i));
@@ -107,7 +107,7 @@ void	execve_threading(t_lstcmd *cmd, char **envp)
 	if (argv == NULL || argv[0] == NULL)
 	{
 		clear_tab(argv);
-		return ;
+		exit(1);
 	}
 	// pid = fork();
 	// if (pid == -1)
@@ -118,7 +118,8 @@ void	execve_threading(t_lstcmd *cmd, char **envp)
 	// }
 	// else if (pid == 0)
 	// {
-	execve(argv[0], argv, envp);
+	if (execve(argv[0], argv, envp) == -1 )
+		exit(1);
 	clear_tab(argv);
 	return ;
 	// }

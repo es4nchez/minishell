@@ -12,6 +12,20 @@
 
 #include "minishell.h"
 
+void	ft_waitpid(t_lstcmd *cmds)
+{
+	int	ret;
+
+	while (cmds)
+	{
+		if (cmds->pid != 0)
+			waitpid(cmds->pid, &ret, 0);
+		cmds = cmds->next;
+		if ( WIFEXITED(ret))
+			g_retcmd = WEXITSTATUS(ret);
+	}
+}
+
 void	builtins(t_input *input, t_lstcmd *cmds, char **envp)
 {
 	if (!cmds || !cmds->cmd)
@@ -58,29 +72,31 @@ void	execution(t_input *input, char **envp)
 			if (pipe(input->pipe_fd) == -1)
 				return ;
 		}
-		else
-		{
-			input->pipe_fd[0] = 0;
-			input->pipe_fd[1] = 1;
-		}
-		input->pid = fork();
-		if (input->pid == 0)
+		cmds->pid = fork();
+		if (cmds->pid == 0)
 		{
 			while (redi > 0 && redi < 5 && redis)
 			{
 				if (redi > 0)
 					if (fd_process(redi, redis, input->fd_io[0]))
-						exit(printf("mishellout: %s: no such file or directory\n", redis->file));
+					{
+						printf("mishellout: %s: no such file or directory\n", redis->file);
+						exit(2);
+					}
 				redis = redis->next;
 				redi = check_redirect(redis);
 			}
-			oldin = input->pipe_fd[0];
+   			ft_close(oldin);
 			if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
         		pipe_r(input, &oldin);
+			if (oldin != 0)
+				ft_close(oldin);
+			oldin = STDIN_FILENO;
 			builtins(input, cmds, envp);
 		}
 		else
 		{
+    		oldin = STDIN_FILENO;
 			if (!cmds->next && !ft_strncmp(cmds->cmd, "exit", 4))
 				exit(0);
 			else if (cmds->next && !ft_strncmp(cmds->cmd, "exit", 4)) 
@@ -94,9 +110,6 @@ void	execution(t_input *input, char **envp)
 		else
 			cmds = NULL;
 	}
-	while (nb_cmd-- > 0)
-    	wait(&input->pid);
+	ft_waitpid(input->cmds);
 	reset_std(input);
-	ft_close(input->pipe_fd[0]);
-	reset_fds(input);
 }

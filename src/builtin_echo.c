@@ -65,4 +65,5 @@ void    bt_echo(t_lstcmd *cmds)
         bt_echo_print(temp);
         write(1, "\n", 1);
     }
+	exit(0);
 }
