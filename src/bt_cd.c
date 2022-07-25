@@ -24,6 +24,7 @@ void	bt_cd(char ***envp, t_input *input)
 		chdir((*envp)[i] + 5);
 	}
 	else if (chdir(input->cmds->args->content) == -1)
-		printf("mishellout: cd: %s: No such file or directory\n", input->cmds->args->content);
+		printf("mishellout: cd: %s: No such file or directory\n",
+			input->cmds->args->content);
 	return ;
 }

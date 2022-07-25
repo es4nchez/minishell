@@ -16,7 +16,7 @@ void	bt_unset(char ***envp, t_list *args)
 {
 	int	i;
 
-	while(args)
+	while (args)
 	{
 		i = 0;
 		while (ft_strncmp((*envp)[i], trim_equal(args->content, 0),
@@ -27,5 +27,5 @@ void	bt_unset(char ***envp, t_list *args)
 			(*envp)[i] = (*envp)[i + 1];
 		args = args->next;
 	}
-	exit (0) ;
+	exit (0);
 }

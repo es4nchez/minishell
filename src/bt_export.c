@@ -12,20 +12,11 @@
 
 #include "minishell.h"
 
-int		export_errors(char *input)
+int	export_errors(char *input)
 {
-//	int	i;
-
-//	i = 0;
 	if (!ft_isalpha(input[0]))
 		return (0);
 	return (1);
-/*	while(input[i])
-	{
-			return (0);
-		i++;
-	}
-	return (1); */
 }
 
 void	bt_export(char ***envp, t_input *input)
@@ -33,11 +24,11 @@ void	bt_export(char ***envp, t_input *input)
 	int		i;
 
 	i = 0;
-
 	if (ft_strlen(input->lineread) == 6)
 		sort_env(*envp);
 	else if (!export_errors(input->cmds->args->content))
-		exit(printf("mishellout: export: '%s': not a valid identifier\n", input->cmds->args->content));
+		exit(printf("mishellout: export: '%s': not a valid identifier\n",
+				input->cmds->args->content));
 	else
 	{
 		while (input->cmds->args)
