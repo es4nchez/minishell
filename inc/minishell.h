@@ -25,6 +25,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
+
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
@@ -82,7 +83,7 @@ sighandler_t signal(int signum, sighandler_t handler);
 void    ft_process(t_input *input, char *str, char **envp);
 char	*dir_name(void);
 char	*take_input(void);
-void	execution(t_input *input, char **envp);
+void	execution(t_input *input, char ***envp);
 void	handle_ctrl(int sig_nb);
 void	execve_threading(t_lstcmd *cmd, char **envp);
 void	print_env(char **envp);
@@ -91,12 +92,14 @@ void	unset_env(char ***envp, char *input);
 void    free_input(t_input *input);
 void    bt_exit(t_input *input);
 void    bt_env(char **envp);
-void	bt_cd(char **envp, char *arg);
+void	bt_env_sorted(char **envp);
+void	bt_cd(char ***envp, t_input *input);
 void    bt_input(t_input *input);
 void    bt_echo(t_lstcmd *cmds);
 void	bt_pwd(char **envp);
-void	bt_export(char **envp, char *arg);
-void	bt_unset(char **envp, char *arg);
+void	bt_export(char ***envp, t_input *input);
+void	bt_unset(char ***envp, t_list *args);
+char	*trim_equal(char *input, int part);
 char    *dol_parse(char *str, char **envp);
 void	ft_cmdadd_back(t_lstcmd **cmds, t_lstcmd *new);
 t_lstcmd	*ft_cmdnew(char *cmd, t_list *args);
@@ -105,6 +108,7 @@ t_lstredi    *ft_Redi_new(char *redi, char *file);
 void	ft_redis_clear(t_lstredi **lst, void (*del)(void *));
 void	ft_redis_add_back(t_lstredi **redis, t_lstredi *new);
 char    *get_env(char *str, char **envp);
+int		rm_env(char ***envp, int n);
 int fd_process(int redi, t_lstredi *redis, int out);
 int check_redirect(t_lstredi *redis);
 char	*get_next_line(int fd);
@@ -115,7 +119,11 @@ void	reset_fds(t_input *input);
 void	close_fds(t_input *input);
 void	reset_std(t_input *input);
 void	ft_close(int fd);
-int len_equal(char *str);
+int 	len_equal(char *str);
+int		set_env(char ***envp, char *var, char *content);
+void	print_sorted_env(char **envp);
+void	sort_env(char **envp);
+char	**env_dup(char **envp);
 
 //char    *dol_parse(char *str, char *envp);
 #endif
