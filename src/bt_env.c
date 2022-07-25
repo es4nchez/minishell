@@ -60,8 +60,8 @@ void	print_sorted_env(char **envp)
 	{
 		if (ft_strchr(envp[i], '='))
 			print_sorted_var(envp[i]);
-		else
-			printf("declare -x %s=\n", envp[i]);
+	else
+		printf("declare -x %s=\n", envp[i]);
 		i++;
 	}
 	return ;
@@ -81,7 +81,7 @@ void	sort_env(char **envp)
 		j = 0;
 		while (j < (env_size(tmp_arr) - i - 1))
 		{
-			if(ft_strncmp(tmp_arr[j], tmp_arr[j + 1], 20) > 0)
+			if(ft_strncmp(tmp_arr[j], tmp_arr[j + 1], 150) > 0)
 			{
 				tmp_str = tmp_arr[j];
 				tmp_arr[j] = tmp_arr[j + 1];
@@ -89,8 +89,8 @@ void	sort_env(char **envp)
 			}
 			j++;
 		}
-		print_sorted_var(tmp_arr[i]);
 		i++;
 	}
+	print_sorted_env(tmp_arr);
 	free(tmp_arr);
 }
