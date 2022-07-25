@@ -12,23 +12,18 @@
 
 #include "minishell.h"
 
-void	bt_cd(char **envp, char *arg)
+void	bt_cd(char ***envp, t_input *input)
 {
 	int	i;
-	char	*error;
 
 	i = 0;
-	if (!arg)
+	if (ft_strlen(input->lineread) == 2)
 	{
-		while (ft_strncmp(envp[i], "HOME=", 5) != 0)
+		while ((*envp)[i] && ft_strncmp((*envp)[i], "HOME=", 5) != 0)
 			i++;
-		arg = ft_substr(envp[i], 5, 255);
-		chdir(arg);
+		chdir((*envp)[i] + 5);
 	}
-	else if (chdir(arg) == -1)
-	{
-		error = ft_strjoin("cd: ", arg);
-		perror(error);
-	}
+	else if (chdir(input->cmds->args->content) == -1)
+		printf("mishellout: cd: %s: No such file or directory\n", input->cmds->args->content);
 	return ;
 }

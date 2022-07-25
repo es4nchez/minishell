@@ -12,23 +12,20 @@
 
 #include "minishell.h"
 
-void	bt_unset(char **envp, char *arg)
+void	bt_unset(char ***envp, t_list *args)
 {
-	char	*env_arg;
-	int		i;
+	int	i;
 
-	i = 0;
-	if (!ft_split(arg, ' ')[1])
-		return ;
-	env_arg = ft_split(ft_split(arg, ' ')[1], '=')[0];
-	while (envp[i] != NULL)
+	while(args)
 	{
-		if (ft_strncmp(envp[i], env_arg, ft_strlen(env_arg)) == 0)
-		{
-			envp[i] = envp[i + 1];
-			return ;
-		}
-		i++;
+		i = 0;
+		while (ft_strncmp((*envp)[i], trim_equal(args->content, 0),
+			ft_strlen(args->content)) != 0 && (*envp)[i])
+			i++;
+		i--;
+		while ((*envp)[++i])
+			(*envp)[i] = (*envp)[i + 1];
+		args = args->next;
 	}
-	return ;
+	exit (0) ;
 }
