@@ -64,17 +64,12 @@ int	set_env(char ***envp, char *var, char *content)
 	i = 0;
 	if (!envp || !var || var[0] == '=')
 		return (1);
-	printf("length : %lu\n", ft_strlen(var));
-	while ((*envp)[i] && ft_strncmp((*envp)[i], var, len_equal((*envp)[i]))
-		!= 0 && ft_strlen((*envp)[i]) == ft_strlen(var) - 1)
+	while ((*envp)[i] && ft_strncmp((*envp)[i], var, len_equal((*envp)[i]) - 1)
+		!= 0)
 		i++;
-	printf("i : %d\n", i);
 	if ((*envp)[i] == NULL)
 		*envp = ft_realloc(*envp, (i + 1) * 9);
-//	if (eq)
 	tmp = ft_strjoin(var, "=");
-//	else
-//		tmp = ft_strjoin(var, "");
 	free(var);
 	var = ft_strjoin(tmp, content);
 	free(tmp);
