@@ -120,7 +120,7 @@ void	close_fds(t_input *input);
 void	reset_std(t_input *input);
 void	ft_close(int fd);
 int 	len_equal(char *str);
-int		set_env(char ***envp, char *var, char *content);
+int		set_env(char ***envp, char *var, char *content, int eq);
 void	print_sorted_env(char **envp);
 void	sort_env(char **envp);
 char	**env_dup(char **envp);

@@ -33,10 +33,13 @@ void	bt_export(char ***envp, t_input *input)
 	{
 		while (input->cmds->args)
 		{
-			set_env(envp, trim_equal(input->cmds->args->content, 0),
-				trim_equal(input->cmds->args->content, 1));
+			if (ft_strchr(input->cmds->args->content, '='))
+				set_env(envp, trim_equal(input->cmds->args->content, 0),
+					trim_equal(input->cmds->args->content, 1), 1);
+			else
+				set_env(envp, trim_equal(input->cmds->args->content, 0),
+					trim_equal(input->cmds->args->content, 1), 0);
 			input->cmds->args = input->cmds->args->next;
 		}
 	}
-	return ;
 }

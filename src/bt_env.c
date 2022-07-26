@@ -60,7 +60,7 @@ void	print_sorted_env(char **envp)
 		if (ft_strchr(envp[i], '='))
 			print_sorted_var(envp[i]);
 		else
-			printf("declare -x %s=\n", envp[i]);
+			printf("declare -x %s\n", envp[i]);
 		i++;
 	}
 	return ;

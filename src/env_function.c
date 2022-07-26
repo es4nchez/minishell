@@ -25,7 +25,7 @@ char	*trim_equal(char *input, int part)
 	}
 	if (!part)
 		return (ft_substr(input, 0, i));
-	return(ft_substr(input, i + 1, ft_strlen(input)));
+	return(ft_substr(input, i, ft_strlen(input)));
 }
 
 int	rm_env(char ***envp, int n)
@@ -56,10 +56,9 @@ int	rm_env(char ***envp, int n)
 	return (0);
 }
 
-int	set_env(char ***envp, char *var, char *content)
+int	set_env(char ***envp, char *var, char *content, int eq)
 {
 	int i;
-	char	*tmp;
 
 	i = 0;
 	if (!envp || !var || var[0] == '=')
@@ -69,11 +68,11 @@ int	set_env(char ***envp, char *var, char *content)
 		i++;
 	if ((*envp)[i] == NULL)
 		*envp = ft_realloc(*envp, (i + 1) * 9);
-	tmp = ft_strjoin(var, "=");
-	free(var);
-	var = ft_strjoin(tmp, content);
-	free(tmp);
-	free(content);
+	if (eq)
+	{
+		var = ft_strjoin(var, content);
+		free(content);
+	}
 	free((*envp)[i]);
 	(*envp)[i] = var;
 	return (0);
