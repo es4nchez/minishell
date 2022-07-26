@@ -77,7 +77,17 @@ int	set_env(char ***envp, char *var, char *content, int eq)
 	(*envp)[i] = var;
 	return (0);
 }
-
+/*if ((*envp)[i] == NULL)
+		envp = ft_realloc(*envp, ++i);
+	tmp = ft_strjoin(var, "=");
+	free(var);
+	var = ft_strjoin(tmp, content);
+	free(tmp);
+	free(content);
+	free((*envp)[i]);
+	(*envp)[i] = var;
+	return (0);
+*/
 void	print_env(char **envp)
 {
 	int	i;

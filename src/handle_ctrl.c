@@ -28,3 +28,18 @@ void	handle_ctrl(int sig_nb)
 		rl_redisplay();
 	}
 }
+
+void	handle_signals2(int signo)
+{
+	if (signo == SIGINT)
+	{
+		ft_putendl_fd("", 1);
+		g_retcmd = 1;
+	}
+	if (signo == SIGQUIT)
+	{
+		ft_putendl_fd("", 1);
+		rl_on_new_line();
+		g_retcmd = 128 + signo;
+	}
+}

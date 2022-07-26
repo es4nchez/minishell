@@ -92,6 +92,8 @@ void	execution(t_input *input, char ***envp)
 	t_lstcmd	*cmds;
 
 	cmds = input->cmds;
+	signal(SIGINT, handle_signals2);
+	signal(SIGQUIT, handle_signals2);
 	while (cmds && cmds->cmd)
 	{
 		if (!cmds->next)
@@ -109,5 +111,7 @@ void	execution(t_input *input, char ***envp)
 			cmds = NULL;
 	}
 	ft_waitpid(input->cmds);
+	signal(SIGINT, handle_ctrl);
+	signal(SIGQUIT, handle_ctrl);
 	reset_std(input);
 }

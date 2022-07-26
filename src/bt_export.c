@@ -31,8 +31,9 @@ int	bt_export(char ***envp, t_list *args, t_input *input)
 				args->content));
 	else
 	{
-		while (input->cmds->args)
+		while (args)
 		{
+			printf("ICI\n");
 			if (ft_strchr(args->content, '='))
 				set_env(envp, trim_equal(args->content, 0),
 					trim_equal(args->content, 1), 1);
