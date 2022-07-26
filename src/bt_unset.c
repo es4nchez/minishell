@@ -14,7 +14,8 @@
 
 int	bt_unset(char ***envp, t_list *args, int args_init)
 {
-	int	i;
+	int		i;
+	char	*var;
 
 	if (!args_init)
 	{
@@ -24,12 +25,10 @@ int	bt_unset(char ***envp, t_list *args, int args_init)
 	while (args)
 	{
 		i = 0;
-		while ((*envp)[i] && ft_strncmp((*envp)[i],
-				trim_equal(args->content, 0), ft_strlen(args->content)) != 0)
-			i++;
-		i--;
-		while ((*envp)[++i])
-			(*envp)[i] = (*envp)[i + 1];
+		var = trim_equal(args->content, 0);
+		set_env(envp, var, NULL);
+		if (var)
+			free(var);
 		args = args->next;
 	}
 	return (1);

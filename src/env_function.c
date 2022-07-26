@@ -17,7 +17,7 @@ char	*trim_equal(char *input, int part)
 	int	i;
 
 	i = 0;
-	if (part && !ft_strchr(input, '='))
+	if (!input)
 		return (NULL);
 	while (input[i] != '=' && input[i])
 	{
@@ -25,7 +25,9 @@ char	*trim_equal(char *input, int part)
 	}
 	if (!part)
 		return (ft_substr(input, 0, i));
-	return (ft_substr(input, i, ft_strlen(input)));
+	if (!input[i])
+		return (ft_calloc(1, 1));
+	return (ft_substr(input, i + 1, ft_strlen(input)));
 }
 
 int	rm_env(char ***envp, int n)
@@ -43,51 +45,49 @@ int	rm_env(char ***envp, int n)
 	tmp = ft_strdup((*envp)[len]);
 	free((*envp)[i]);
 	free((*envp)[n]);
-	envp = ft_realloc(*envp, len - 1);
+	(*envp)[n] = NULL;
+	*envp = ft_realloc(*envp, (len + 2) * sizeof(char *));
 	if (!envp)
 		return (1);
 	i = -1;
-	while ((*(*envp)[n]))
+	while ((*envp)[n])
 	{
-		(*envp)[n] = (*envp)[n + 1];
+		(*envp)[n] = (*envp)[n];
 		n++;
 	}
 	(*envp)[n] = tmp;
 	return (0);
 }
 
-int	set_env(char ***envp, char *var, char *content, int eq)
+int	set_env(char ***envp, char *var, char *content)
 {
-	int	i;
+	int		i;
+	char	*tmp;
 
 	i = 0;
-	if (!envp || !var || var[0] == '=')
+	if (!envp || !var)
 		return (1);
-	while ((*envp)[i] && ft_strncmp((*envp)[i], var, len_equal((*envp)[i]) - 1)
-		!= 0)
+	while ((*envp)[i] && ft_strncmp((*envp)[i], var,
+		len_equal((*envp)[i])) != 0)
 		i++;
+	if (content == NULL)
+		return (rm_env(envp, i));
 	if ((*envp)[i] == NULL)
-		*envp = ft_realloc(*envp, (i + 1) * 9);
-	if (eq)
-	{
-		var = ft_strjoin(var, content);
-		free(content);
-	}
-	free((*envp)[i]);
-	(*envp)[i] = var;
-	return (0);
-}
-/*if ((*envp)[i] == NULL)
-		envp = ft_realloc(*envp, ++i);
-	tmp = ft_strjoin(var, "=");
+		*envp = ft_realloc(*envp, (++i + 1) * sizeof(char *));
+	if (content[0] == '\0')
+		tmp = ft_strdup(var);
+	else
+		tmp = ft_strjoin(var, "=");
 	free(var);
 	var = ft_strjoin(tmp, content);
 	free(tmp);
 	free(content);
-	free((*envp)[i]);
-	(*envp)[i] = var;
+	if ((*envp)[i - 1])
+		free((*envp)[i - 1]);
+	(*envp)[i - 1] = var;
 	return (0);
-*/
+}
+
 void	print_env(char **envp)
 {
 	int	i;

@@ -16,8 +16,8 @@ NAME	= minishell
 # Compilation
 CC			= gcc
 CFLAGS		= -Wall -Wextra -Werror -g -fsanitize=address
-HEADS		= -I$(INC) -I${LIBFTDIR} -I${HOME}/.brew/Cellar/readline/8.1.2/include/
-LIBS		= -L${HOME}/.brew/Cellar/readline/8.1.2/lib/ -lreadline -lhistory
+HEADS		= -I$(INC) -I${LIBFTDIR} -I${HOME}/.brew/Cellar/readline/8.1.1/include/
+LIBS		= -L${HOME}/.brew/Cellar/readline/8.1.1/lib/ -lreadline -lhistory
 DEBUG_FILE	= .debug
 JPP			= $(shell cat ${DEBUG_FILE} | tr -d '\n')
 CDEBUG		= 

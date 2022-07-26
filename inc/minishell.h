@@ -111,7 +111,7 @@ void			clear_tab(char **tab);
 void			string_clean(char **s, char **envp);
 char			*sep(char **str, char c, char *set);
 int				len_equal(char *str);
-int				set_env(char ***envp, char *var, char *content, int eq);
+int				set_env(char ***envp, char *var, char *content);
 void			print_sorted_env(char **envp);
 void			sort_env(char **envp);
 char			**env_dup(char **envp);

@@ -74,8 +74,10 @@ t_lstcmd	*ft_pars_cmd(char **str, char **envp)
 {
 	t_lstcmd	*cmd;
 
-	cmd = init_cmd();
 	skip_space(str);
+	if (**str == '\0')
+		return (NULL);
+	cmd = init_cmd();
 	if (**str == '|')
 		cmd->cmd = sep(str, **str, "|");
 	else
