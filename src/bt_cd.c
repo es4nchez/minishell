@@ -12,19 +12,44 @@
 
 #include "minishell.h"
 
-void	bt_cd(char ***envp, t_input *input)
+void	change_pwd(char ***envp, char *pwd, char *oldpwd)
+{
+	(void)oldpwd;
+	set_env(envp, "PWD", pwd, 1);
+}
+
+void	cd_home(char ***envp)
 {
 	int	i;
 
 	i = 0;
+	while ((*envp)[i] && ft_strncmp((*envp)[i], "HOME=", 5) != 0)
+		i++;
+	if (i == env_size(*envp))
+	{
+		printf("mishellout: cd: HOME not set\n");
+		return;
+	}
+	set_env(envp, "OLDPWD", dir_name(), 1);
+	chdir((*envp)[i] + 5);
+	set_env(envp, "PWD", dir_name(), 1);
+	return ;
+}
+
+void	bt_cd(char ***envp, t_input *input)
+{
+	int		i;
+
+	i = 0;
 	if (ft_strlen(input->lineread) == 2)
 	{
-		while ((*envp)[i] && ft_strncmp((*envp)[i], "HOME=", 5) != 0)
-			i++;
-		chdir((*envp)[i] + 5);
+		cd_home(envp);
+		return ;
 	}
-	else if (chdir(input->cmds->args->content) == -1)
+	if (chdir(input->cmds->args->content) == -1)
 		printf("mishellout: cd: %s: No such file or directory\n",
 			input->cmds->args->content);
+	else
+		change_pwd(envp, dir_name(),"tt");
 	return ;
 }

@@ -15,5 +15,6 @@
 void	bt_exit(t_input *input)
 {
 	(void)input;
-	printf("exit\n");
+	write(1, "exit\n", 5);
+	exit (0);
 }

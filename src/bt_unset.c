@@ -27,5 +27,5 @@ void	bt_unset(char ***envp, t_list *args)
 			(*envp)[i] = (*envp)[i + 1];
 		args = args->next;
 	}
-	exit (0);
+	return;
 }
