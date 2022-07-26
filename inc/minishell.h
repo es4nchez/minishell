@@ -6,7 +6,7 @@
 /*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 13:45:26 by esanchez          #+#    #+#             */
-/*   Updated: 2022/02/04 15:39:16 by yalthaus         ###   ########.fr       */
+/*   Updated: 2022/07/22 15:15:32 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ char    *dol_parse(char *str, char **envp);
 void	ft_cmdadd_back(t_lstcmd **cmds, t_lstcmd *new);
 t_lstcmd	*ft_cmdnew(char *cmd, t_list *args);
 void	ft_cmdclear(t_lstcmd **lst, void (*del)(void *));
-t_lstredi    *ft_Redi_new(char *redi, char *file);
+t_lstredi    *ft_redi_new(char *redi, char *file);
 void	ft_redis_clear(t_lstredi **lst, void (*del)(void *));
 void	ft_redis_add_back(t_lstredi **redis, t_lstredi *new);
 char    *get_env(char *str, char **envp);
@@ -111,13 +111,19 @@ int fd_process(int redi, t_lstredi *redis, int out);
 int check_redirect(t_lstredi *redis);
 char	*get_next_line(int fd);
 int pipe_process(t_lstcmd *cmds);
-void    pipe_w(t_input *input, int  *oldin);
-void    pipe_r(t_input *input, int  *oldin);
+void    pipe_w(t_input *input);
+void    pipe_r(t_input *input);
 void	reset_fds(t_input *input);
 void	close_fds(t_input *input);
 void	reset_std(t_input *input);
 void	ft_close(int fd);
+int	exec_redirect(int redi, t_lstredi *redis, t_input *input);
 int len_equal(char *str);
+char	*cmd_exist(char *cmd, char *path);
+char	**init_paths(char *cmd, int *i, char *path);
+char	*cmd_clean(char **paths, int i);
+void	clear_tab(char **tab);
+void	string_clean(char **s, char **envp);
+char	*sep(char **str, char c, char *set);
 
-//char    *dol_parse(char *str, char *envp);
 #endif

@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_isinset.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/22 14:26:53 by yalthaus          #+#    #+#             */
-/*   Updated: 2022/07/22 14:37:59 by yalthaus         ###   ########.fr       */
+/*   Created: 2022/07/22 15:02:48 by yalthaus          #+#    #+#             */
+/*   Updated: 2022/07/22 15:08:43 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	free_input(t_input *input)
+int	ft_isinset(char c, char *set)
 {
-	if (input->lineread)
-		ft_cmdclear(&(input->cmds), free);
-	free(input->lineread);
-	free(input);
-	exit(0);
+	while (*set && c != '\0' && c != *set)
+		set++;
+	return (*set);
 }

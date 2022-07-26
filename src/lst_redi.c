@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lst_redi.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/22 14:32:15 by yalthaus          #+#    #+#             */
+/*   Updated: 2022/07/22 14:32:37 by yalthaus         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-t_lstredi    *ft_Redi_new(char *redi, char *file)
+t_lstredi	*ft_redi_new(char *redi, char *file)
 {
 	t_lstredi	*element;
 
@@ -9,11 +21,11 @@ t_lstredi    *ft_Redi_new(char *redi, char *file)
 		return (NULL);
 	element->redi = redi;
 	element->next = NULL;
-    element->file = file;
+	element->file = file;
 	return (element);
 }
 
-t_lstredi    *ft_redis_last(t_lstredi *redis)
+t_lstredi	*ft_redis_last(t_lstredi *redis)
 {
 	if (!redis)
 		return (NULL);

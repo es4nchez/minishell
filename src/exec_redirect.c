@@ -1,22 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   exec_redirect.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/22 14:26:53 by yalthaus          #+#    #+#             */
-/*   Updated: 2022/07/22 14:37:59 by yalthaus         ###   ########.fr       */
+/*   Created: 2022/07/22 12:29:45 by yalthaus          #+#    #+#             */
+/*   Updated: 2022/07/22 12:51:40 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_input(t_input *input)
+int	exec_redirect(int redi, t_lstredi *redis, t_input *input)
 {
-	if (input->lineread)
-		ft_cmdclear(&(input->cmds), free);
-	free(input->lineread);
-	free(input);
-	exit(0);
+	while (redi > 0 && redi < 5 && redis)
+	{
+		if (redi > 0)
+		{
+			if (fd_process(redi, redis, input->fd_io[0]))
+			{
+				printf("mishellout: %s: no such file or directory\n",
+					redis->file);
+				exit(2);
+			}
+		}
+		redis = redis->next;
+		redi = check_redirect(redis);
+	}
+	return (0);
 }

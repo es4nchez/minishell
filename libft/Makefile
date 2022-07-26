@@ -6,7 +6,7 @@
 #    By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/13 01:48:48 by yalthaus          #+#    #+#              #
-#    Updated: 2021/10/16 05:09:58 by yalthaus         ###   ########.fr        #
+#    Updated: 2022/07/22 15:09:52 by yalthaus         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,6 +60,8 @@ SRCS			=	ft_isalpha.c\
 					ft_strmapi.c\
 					ft_striteri.c\
 					ft_realloc.c\
+					ft_isinset.c\
+					skip_space.c\
 
 OBJS			= $(SRCS:.c=.o)
 

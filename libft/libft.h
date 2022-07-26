@@ -6,7 +6,7 @@
 /*   By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 01:21:47 by yalthaus          #+#    #+#             */
-/*   Updated: 2021/10/16 05:59:54 by yalthaus         ###   ########.fr       */
+/*   Updated: 2022/07/22 15:07:53 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ char	*ft_itoa(int n);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void	ft_striteri(char *s, void (*f)(unsigned int, char *));
 void	*ft_realloc(void *ptr, int len);
+int		ft_isinset(char c, char *set);
+void	skip_space(char **str);
 
 t_list	*ft_lstnew(void *content);
 void	ft_lstadd_front(t_list **lst, t_list *new);

@@ -6,7 +6,7 @@
 #    By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/29 12:23:24 by yalthaus          #+#    #+#              #
-#    Updated: 2022/02/04 14:35:19 by yalthaus         ###   ########.fr        #
+#    Updated: 2022/07/22 14:16:17 by yalthaus         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME	= minishell
 
 # Compilation
 CC			= gcc
-CFLAGS		= -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS		= -Wall -Wextra -Werror -g #-fsanitize=address
 HEADS		= -I$(INC) -I${LIBFTDIR} -I${HOME}/.brew/Cellar/readline/8.1.2/include/
 LIBS		= -L${HOME}/.brew/Cellar/readline/8.1.2/lib/ -lreadline -lhistory
 DEBUG_FILE	= .debug
