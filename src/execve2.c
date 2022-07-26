@@ -6,7 +6,7 @@
 /*   By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 14:21:08 by yalthaus          #+#    #+#             */
-/*   Updated: 2022/07/22 14:22:30 by yalthaus         ###   ########.fr       */
+/*   Updated: 2022/07/26 13:44:37 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	**init_paths(char *cmd, int *i, char *path)
 
 	*i = -1;
 	paths = ft_split(path, ':');
-	while (paths[++(*i)])
+	while (paths && paths[++(*i)])
 	{
 		tmp = paths[*i];
 		paths[*i] = ft_strjoin(paths[*i], cmd);
@@ -58,20 +58,20 @@ char	*cmd_exist(char *cmd, char *path)
 	int			i;
 	char		**paths;
 
-	buff.st_mode = 0;
 	paths = init_paths(cmd, &i, path);
 	n = i;
 	i = -1;
 	if (stat(cmd + 1, &buff) == 0)
 		return (cmd);
-	while (paths[i + 1] && stat(paths[++i], &buff))
+	while (paths && paths[i + 1] && stat(paths[++i], &buff))
 		;
-	if (i == n - 1)
+	if (i == n - 1 || i == -1)
 	{
 		i = -1;
-		while (paths[++i])
+		while (paths && paths[++i])
 			free(paths[i]);
-		free(paths);
+		if (paths)
+			free(paths);
 		printf("mishellout: command not found: %s\n", cmd + 1);
 		free(cmd);
 		exit(127);

@@ -1,7 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bt_exit.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/25 18:56:24 by esanchez          #+#    #+#             */
+/*   Updated: 2022/07/25 18:56:39 by esanchez         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-void	bt_exit(t_input *input)
+int	bt_exit(t_input *input)
 {
 	(void)input;
-	printf("exit\n");
+	write(1, "exit\n", 5);
+	exit (0);
+	return (1);
 }

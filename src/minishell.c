@@ -30,7 +30,7 @@ static void	init_input(t_input **input)
 	(*input)->exit = 0;
 }
 
-static char	**env_dup(char **envp)
+char	**env_dup(char **envp)
 {
 	char	**dup;
 	int		i;
@@ -78,7 +78,7 @@ int	main(int argc, char **argv, char **envp)
 		if (ft_strncmp(input->lineread, "", 1) == 0)
 			continue ;
 		else
-			execution(input, env);
+			execution(input, &env);
 		if (input->lineread)
 			ft_cmdclear(&(input->cmds), free);
 	}

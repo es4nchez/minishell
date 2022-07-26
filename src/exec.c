@@ -6,7 +6,7 @@
 /*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 19:53:22 by esanchez          #+#    #+#             */
-/*   Updated: 2022/07/22 12:53:10 by yalthaus         ###   ########.fr       */
+/*   Updated: 2022/07/26 13:43:57 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,29 +26,30 @@ void	ft_waitpid(t_lstcmd *cmds)
 	}
 }
 
-void	builtins(t_input *input, t_lstcmd *cmds, char **envp)
+void	builtins(t_input *input, t_lstcmd *cmds, char ***envp)
 {
 	if (!cmds || !cmds->cmd)
 		return ;
-	if (!ft_strncmp(cmds->cmd, "echo", 4))
+	if (!ft_strncmp(cmds->cmd, "echo", 5) && ft_strlen(cmds->cmd) == 4)
 		bt_echo(cmds);
-	//else if (!ft_strncmp(cmds->cmd, "cd", 2));
-		//bt_cd(envp, ft_split(lineread, ' ')[1]);
-	else if (!ft_strncmp(cmds->cmd, "exit", 4))
+	else if (!ft_strncmp(cmds->cmd, "cd", 3))
+		bt_cd(envp, cmds->args, input);
+	else if (!ft_strncmp(cmds->cmd, "exit", 5))
 		bt_exit(input);
-	else if (!ft_strncmp(cmds->cmd, "pwd", 3))
-		bt_pwd(envp);
-	else if (!ft_strncmp(cmds->cmd, "env", 3))
-		bt_env(envp);
-	//else if (!ft_strncmp(cmds->cmd, "export", 6));
-		//bt_export(envp, lineread);
-	//else if (!ft_strncmp(cmds->cmd, "unset", 5));
-		//bt_unset(envp, lineread);
+	else if (!ft_strncmp(cmds->cmd, "pwd", 4) && ft_strlen(cmds->cmd) == 3)
+		bt_pwd(*envp);
+	else if (!ft_strncmp(cmds->cmd, "env", 4))
+		bt_env(*envp);
+	else if (!ft_strncmp(cmds->cmd, "export", 7))
+		bt_export(envp, cmds->args, input);
+	else if (!ft_strncmp(cmds->cmd, "unset", 6))
+		bt_unset(envp, cmds->args, cmds->arg_init);
 	else
-		execve_threading(cmds, envp);
+		execve_threading(cmds, *envp);
+	exit(0);
 }
 
-void	child_process(t_input *input, char **envp, t_lstcmd *cmds)
+void	child_process(t_input *input, char ***envp, t_lstcmd *cmds)
 {
 	if (cmds->redi_init)
 		exec_redirect(check_redirect(cmds->redis), cmds->redis, input);
@@ -57,15 +58,13 @@ void	child_process(t_input *input, char **envp, t_lstcmd *cmds)
 	builtins(input, cmds, envp);
 }
 
-int	exec_process(t_input *input, char **envp, t_lstcmd *cmds)
+int	exec_process(t_input *input, char ***envp, t_lstcmd *cmds)
 {
 	if (cmds->pid == 0)
 		child_process(input, envp, cmds);
 	else
 	{
-		if (cmds && !cmds->next && !ft_strncmp(cmds->cmd, "exit", 4))
-			exit(0);
-		else if (cmds && cmds->next && !ft_strncmp(cmds->cmd, "exit", 4))
+		if (cmds && cmds->next && !ft_strncmp(cmds->cmd, "exit", 4))
 			return (1);
 		if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
 			pipe_w(input);
@@ -73,13 +72,31 @@ int	exec_process(t_input *input, char **envp, t_lstcmd *cmds)
 	return (0);
 }
 
-void	execution(t_input *input, char **envp)
+int	bt_no_fork(t_input *input, t_lstcmd *cmds, char ***envp)
+{
+	if (!cmds || !cmds->cmd)
+		return (0);
+	else if (!ft_strncmp(cmds->cmd, "cd", 3))
+		return (bt_cd(envp, cmds->args, input));
+	else if (!ft_strncmp(cmds->cmd, "exit", 5))
+		return (bt_exit(input));
+	else if (!ft_strncmp(cmds->cmd, "export", 7) && cmds->arg_init)
+		return (bt_export(envp, cmds->args, input));
+	else if (!ft_strncmp(cmds->cmd, "unset", 6))
+		return (bt_unset(envp, cmds->args, cmds->arg_init));
+	return (0);
+}
+
+void	execution(t_input *input, char ***envp)
 {
 	t_lstcmd	*cmds;
 
 	cmds = input->cmds;
 	while (cmds && cmds->cmd)
 	{
+		if (!cmds->next)
+			if (bt_no_fork(input, cmds, envp))
+				break ;
 		if (cmds->next)
 			if (pipe(input->pipe_fd) == -1)
 				return ;
