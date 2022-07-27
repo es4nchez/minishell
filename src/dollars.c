@@ -76,14 +76,14 @@ char	*get_env(char *str, char **envp)
 		return (ft_itoa(g_retcmd));
 	var = get_var(str);
 	if (!var)
-		return (NULL);
+		return (ft_free(var));
 	while (envp[i] && (ft_strncmp(envp[i], var, len_equal(envp[i])) != 0
 			|| ft_strncmp(envp[i], var, ft_strlen(var)) != 0))
 		i++;
-	if (envp[i] == NULL)
-		return (NULL);
 	if (var)
 		free(var);
+	if (envp[i] == NULL)
+		return (NULL);
 	temp = ft_strchr(envp[i], '=');
 	i = 0;
 	while (temp[i] != '\0')

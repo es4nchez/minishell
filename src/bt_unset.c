@@ -14,7 +14,6 @@
 
 int	bt_unset(char ***envp, t_list *args, int args_init)
 {
-	int		i;
 	char	*var;
 
 	if (!args_init)
@@ -24,7 +23,6 @@ int	bt_unset(char ***envp, t_list *args, int args_init)
 	}
 	while (args)
 	{
-		i = 0;
 		var = trim_equal(args->content, 0);
 		set_env(envp, var, NULL);
 		if (var)

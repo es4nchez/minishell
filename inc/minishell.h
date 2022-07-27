@@ -117,5 +117,6 @@ void			sort_env(char **envp);
 char			**env_dup(char **envp);
 int				env_size(char **envp);
 int				init_signal(int n);
+void			*ft_free(void *ptr);
 
 #endif

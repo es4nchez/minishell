@@ -12,6 +12,12 @@
 
 #include "minishell.h"
 
+void	*ft_free(void *ptr)
+{
+	free(ptr);
+	return (NULL);
+}
+
 void	free_input(t_input *input)
 {
 	if (input->lineread)

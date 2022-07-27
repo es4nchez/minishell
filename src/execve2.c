@@ -43,9 +43,9 @@ char	**init_paths(char *cmd, int *i, char *path)
 	paths = ft_split(path, ':');
 	while (paths && paths[++(*i)])
 	{
-		tmp = paths[*i];
-		paths[*i] = ft_strjoin(paths[*i], cmd);
-		free(tmp);
+		tmp = ft_strjoin(paths[*i], cmd);
+		free(paths[*i]);
+		paths[*i] = tmp;
 	}
 	free(path);
 	return (paths);

@@ -38,9 +38,6 @@ void	cd_home(char ***envp)
 
 int	bt_cd(char ***envp, t_list *args, t_input *input)
 {
-	int		i;
-
-	i = 0;
 	if (ft_strlen(input->lineread) == 2)
 	{
 		cd_home(envp);
@@ -48,7 +45,7 @@ int	bt_cd(char ***envp, t_list *args, t_input *input)
 	}
 	if (chdir(args->content) == -1)
 		printf("mishellout: cd: %s: No such file or directory\n",
-			args->content);
+			(char *)args->content);
 	else
 		change_pwd(envp, dir_name(), "tt");
 	return (1);

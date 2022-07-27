@@ -34,7 +34,6 @@ int	rm_env(char ***envp, int n)
 {
 	int		i;
 	int		len;
-	char	*tmp;
 
 	i = 0;
 	if ((*envp)[n] == NULL)
@@ -42,20 +41,17 @@ int	rm_env(char ***envp, int n)
 	while ((*envp)[i])
 		i++;
 	len = i;
-	tmp = ft_strdup((*envp)[len]);
-	free((*envp)[i]);
 	free((*envp)[n]);
-	(*envp)[n] = NULL;
-	*envp = ft_realloc(*envp, (len + 2) * sizeof(char *));
+	*envp = ft_realloc(*envp, (len + 1) * sizeof(char *));
 	if (!envp)
 		return (1);
 	i = -1;
 	while ((*envp)[n])
 	{
-		(*envp)[n] = (*envp)[n];
+		(*envp)[n] = (*envp)[n + 1];
 		n++;
 	}
-	(*envp)[n] = tmp;
+	(*envp)[len - 1] = NULL;
 	return (0);
 }
 
@@ -73,7 +69,7 @@ int	set_env(char ***envp, char *var, char *content)
 	if (content == NULL)
 		return (rm_env(envp, i));
 	if ((*envp)[i] == NULL)
-		*envp = ft_realloc(*envp, (++i + 1) * sizeof(char *));
+		*envp = ft_realloc(*envp, (i + 2) * sizeof(char *));
 	if (content[0] == '\0')
 		tmp = ft_strdup(var);
 	else
@@ -82,9 +78,9 @@ int	set_env(char ***envp, char *var, char *content)
 	var = ft_strjoin(tmp, content);
 	free(tmp);
 	free(content);
-	if ((*envp)[i - 1])
-		free((*envp)[i - 1]);
-	(*envp)[i - 1] = var;
+	if ((*envp)[i])
+		free((*envp)[i]);
+	(*envp)[i] = var;
 	return (0);
 }
 
@@ -95,7 +91,7 @@ void	print_env(char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strchr(envp[i], '=') && envp[i + 1])
+		if (ft_strchr(envp[i], '='))
 			printf("\e[33m%s\e[0m\n", envp[i]);
 		i++;
 	}
