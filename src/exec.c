@@ -35,7 +35,7 @@ void	builtins(t_input *input, t_lstcmd *cmds, char ***envp)
 	else if (!ft_strncmp(cmds->cmd, "cd", 3))
 		bt_cd(envp, cmds->args, input);
 	else if (!ft_strncmp(cmds->cmd, "exit", 5))
-		bt_exit(input);
+		bt_exit(input, cmds->args, cmds->arg_init);
 	else if (!ft_strncmp(cmds->cmd, "pwd", 4) && ft_strlen(cmds->cmd) == 3)
 		bt_pwd(*envp);
 	else if (!ft_strncmp(cmds->cmd, "env", 4))
@@ -55,7 +55,8 @@ void	child_process(t_input *input, char ***envp, t_lstcmd *cmds)
 		exec_redirect(check_redirect(cmds->redis), cmds->redis, input);
 	if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
 		pipe_r(input);
-	builtins(input, cmds, envp);
+	if (cmds->next)
+		builtins(input, cmds, envp);
 }
 
 int	exec_process(t_input *input, char ***envp, t_lstcmd *cmds)
@@ -63,12 +64,8 @@ int	exec_process(t_input *input, char ***envp, t_lstcmd *cmds)
 	if (cmds->pid == 0)
 		child_process(input, envp, cmds);
 	else
-	{
-		if (cmds && cmds->next && !ft_strncmp(cmds->cmd, "exit", 4))
-			return (1);
 		if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
 			pipe_w(input);
-	}
 	return (0);
 }
 
@@ -79,7 +76,7 @@ int	bt_no_fork(t_input *input, t_lstcmd *cmds, char ***envp)
 	else if (!ft_strncmp(cmds->cmd, "cd", 3))
 		return (bt_cd(envp, cmds->args, input));
 	else if (!ft_strncmp(cmds->cmd, "exit", 5))
-		return (bt_exit(input));
+		return (bt_exit(input, cmds->args, cmds->arg_init));
 	else if (!ft_strncmp(cmds->cmd, "export", 7) && cmds->arg_init)
 		return (bt_export(envp, cmds->args, input));
 	else if (!ft_strncmp(cmds->cmd, "unset", 6))

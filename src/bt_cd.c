@@ -27,7 +27,7 @@ void	cd_home(char ***envp)
 		i++;
 	if (i == env_size(*envp))
 	{
-		printf("mishellout: cd: HOME not set\n");
+		ft_strerror("mishellout: cd: HOME not set\n", NULL);
 		return ;
 	}
 	set_env(envp, ft_strdup("OLDPWD"), dir_name());
@@ -44,8 +44,8 @@ int	bt_cd(char ***envp, t_list *args, t_input *input)
 		return (1);
 	}
 	if (chdir(args->content) == -1)
-		printf("mishellout: cd: %s: No such file or directory\n",
-			(char *)args->content);
+		ft_strerror("mishellout: cd: ", (char *)args->content,
+			": No such file or directory\n", NULL);
 	else
 		change_pwd(envp, dir_name(), "tt");
 	return (1);

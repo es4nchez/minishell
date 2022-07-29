@@ -33,7 +33,7 @@ char	*sep(char **str, char c, char *set)
 			get_quote(str, **str);
 			if (**str == '\0')
 			{
-				printf("mishellout: quote not closed\n");
+				ft_strerror("mishellout: quote not closed\n");
 				return (NULL);
 			}
 		}

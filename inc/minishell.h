@@ -30,6 +30,7 @@
 # include <sys/stat.h>
 # include <time.h>
 # include <termios.h>
+#include <stdarg.h>
 
 typedef struct s_lstredi
 {
@@ -72,8 +73,8 @@ void			execve_threading(t_lstcmd *cmd, char **envp);
 void			print_env(char **envp);
 void			export_env(char ***envp, char *input);
 void			unset_env(char ***envp, char *input);
-void			free_input(t_input *input);
-int				bt_exit(t_input *input);
+void			free_input(t_input *input, int ret);
+int				bt_exit(t_input *input, t_list *args, int arg_init);
 void			bt_env(char **envp);
 void			bt_env_sorted(char **envp);
 int				bt_cd(char ***envp, t_list *args, t_input *input);
@@ -118,5 +119,6 @@ char			**env_dup(char **envp);
 int				env_size(char **envp);
 int				init_signal(int n);
 void			*ft_free(void *ptr);
+int				ft_strerror(char *str, ...);
 
 #endif

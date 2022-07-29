@@ -18,11 +18,11 @@ void	*ft_free(void *ptr)
 	return (NULL);
 }
 
-void	free_input(t_input *input)
+void	free_input(t_input *input, int ret)
 {
 	if (input->lineread)
 		ft_cmdclear(&(input->cmds), free);
 	free(input->lineread);
 	free(input);
-	exit(0);
+	exit(ret);
 }

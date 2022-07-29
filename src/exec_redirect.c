@@ -20,8 +20,7 @@ int	exec_redirect(int redi, t_lstredi *redis, t_input *input)
 		{
 			if (fd_process(redi, redis, input->fd_io[0]))
 			{
-				printf("mishellout: %s: no such file or directory\n",
-					redis->file);
+				ft_strerror("mishellout: ", redis->file, ": no such file or directory\n");
 				exit(2);
 			}
 		}

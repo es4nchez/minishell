@@ -17,10 +17,7 @@ int	bt_unset(char ***envp, t_list *args, int args_init)
 	char	*var;
 
 	if (!args_init)
-	{
-		printf("unset: not enough arguments\n");
-		return (1);
-	}
+		return (ft_strerror("unset: not enough arguments\n"));
 	while (args)
 	{
 		var = trim_equal(args->content, 0);
