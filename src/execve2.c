@@ -51,9 +51,9 @@ char	**init_paths(char *cmd, int *i, char *path)
 	return (paths);
 }
 
-char *cmd_rel(char *cmd)
+char	*cmd_rel(char *cmd)
 {
-	char *ret;
+	char	*ret;
 
 	ret = ft_strdup(cmd + 1);
 	free(cmd);

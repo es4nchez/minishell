@@ -25,7 +25,7 @@ int	bt_export(char ***envp, t_list *args, t_input *input)
 		sort_env(*envp);
 	else if (!export_errors(args->content))
 		exit(ft_strerror("mishellout: export: ", (char *)args->content,
-			": not a valid identifier\n"));
+				": not a valid identifier\n"));
 	else
 	{
 		while (args)

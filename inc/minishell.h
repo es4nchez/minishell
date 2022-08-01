@@ -30,7 +30,7 @@
 # include <sys/stat.h>
 # include <time.h>
 # include <termios.h>
-#include <stdarg.h>
+# include <stdarg.h>
 
 typedef struct s_lstredi
 {
@@ -120,5 +120,10 @@ int				env_size(char **envp);
 int				init_signal(int n);
 void			*ft_free(void *ptr);
 int				ft_strerror(char *str, ...);
+void			child_process(t_input *input, char ***envp, t_lstcmd *cmds);
+void			builtins(t_input *input, t_lstcmd *cmds, char ***envp);
+void			cmd_arg(t_lstcmd *cmds, char **str, int type, char **envp);
+t_lstredi		*ft_pars_redi(char **str, char **envp);
+t_list			*ft_pars_arg(char **str, char **envp);
 
 #endif

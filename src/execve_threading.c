@@ -12,6 +12,15 @@
 
 #include "minishell.h"
 
+void	child_process(t_input *input, char ***envp, t_lstcmd *cmds)
+{
+	if (cmds->redi_init)
+		exec_redirect(check_redirect(cmds->redis), cmds->redis, input);
+	if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
+		pipe_r(input);
+	builtins(input, cmds, envp);
+}
+
 char	**execve_arg(t_lstcmd *cmd, char **envp)
 {
 	int		i;

@@ -35,8 +35,9 @@ int	bt_exit(t_input *input, t_list *args, int arg_init)
 		}
 	if (args->next)
 	{
+		printf("exit\n");
 		g_retcmd = ft_strerror("mishellout: exit: too many argument\n", NULL);
-		return (0);
+		return (1);
 	}
 	n = ft_atoi((char *)args->content);
 	if (n > 255)
