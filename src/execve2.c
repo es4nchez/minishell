@@ -51,6 +51,15 @@ char	**init_paths(char *cmd, int *i, char *path)
 	return (paths);
 }
 
+char *cmd_rel(char *cmd)
+{
+	char *ret;
+
+	ret = ft_strdup(cmd + 1);
+	free(cmd);
+	return (ret);
+}
+
 char	*cmd_exist(char *cmd, char *path)
 {
 	int			n;
@@ -62,7 +71,7 @@ char	*cmd_exist(char *cmd, char *path)
 	n = i;
 	i = -1;
 	if (stat(cmd + 1, &buff) == 0)
-		return (cmd);
+		return (cmd_rel(cmd));
 	while (paths && paths[i + 1] && stat(paths[++i], &buff))
 		;
 	if (i == n - 1 || i == -1)

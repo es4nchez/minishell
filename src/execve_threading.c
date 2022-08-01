@@ -49,7 +49,7 @@ void	execve_threading(t_lstcmd *cmd, char **envp)
 		exit(1);
 	}
 	if (execve(argv[0], argv, envp) == -1)
-		exit(1);
+		printf("putain de merde\n");
 	clear_tab(argv);
 	return ;
 }
