@@ -6,7 +6,7 @@
 /*   By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 15:10:51 by yalthaus          #+#    #+#             */
-/*   Updated: 2022/07/22 15:15:53 by yalthaus         ###   ########.fr       */
+/*   Updated: 2022/08/01 18:11:32 by esanchez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*sep(char **str, char c, char *set)
 			get_quote(str, **str);
 			if (**str == '\0')
 			{
-				ft_strerror("mishellout: quote not closed\n");
+				ft_strerror("mishellout: quote not closed\n", NULL);
 				return (NULL);
 			}
 		}
@@ -95,12 +95,14 @@ void	string_clean(char **s, char **envp)
 		return ;
 	while ((*s)[++i])
 	{
-		if ((*s)[i] == '\'')
+		if (!ft_strrchr(&(*s)[i], '"') && (*s)[i] == '\'')
 			while ((*s)[++i] != '\0' && (*s)[i] != '\'')
-				;
+				if ((*s)[++i] == '\0')
+					break ;
 		if ((*s)[i] == '$')
 		{
 			dol_swap(s, envp);
+			*s = rm_quote(*s);
 			return ;
 		}
 		if ((*s)[i] == '\"')
