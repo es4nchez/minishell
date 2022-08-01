@@ -22,17 +22,14 @@ int	get_option(t_list *lst, char c)
 	{
 		if (*(char *)lst->content == '-')
 		{
-			i = 0;
+			i = 1;
 			while (((char *)lst->content)[i])
 			{
-				i++;
 				if (((char *)lst->content)[i] == c)
-				{
 					ret = 1;
-					break ;
-				}
 				else
 					return (0);
+				i++;
 			}	
 		}
 		lst = lst->next;
@@ -42,10 +39,6 @@ int	get_option(t_list *lst, char c)
 
 void	bt_echo_print(t_list *temp)
 {
-	while (temp && temp->content && *(char *)temp->content == '-')
-	{
-		temp = temp->next;
-	}
 	while (temp && temp->content)
 	{
 		write(1, temp->content, ft_strlen(temp->content));
@@ -68,7 +61,10 @@ void	bt_echo(t_lstcmd *cmds)
 	temp = cmds->args;
 	nl = get_option(temp, 'n');
 	if (nl)
+	{
+		temp = temp->next;
 		bt_echo_print(temp);
+	}
 	else
 	{
 		bt_echo_print(temp);

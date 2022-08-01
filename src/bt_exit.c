@@ -40,7 +40,7 @@ int	bt_exit(t_input *input, t_list *args, int arg_init)
 	}
 	n = ft_atoi((char *)args->content);
 	if (n > 255)
-		exit_process(input, 244);
+		exit_process(input, n % 256);
 	exit_process(input, n);
 	return (1);
 }

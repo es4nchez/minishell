@@ -34,7 +34,7 @@ void	handle_signals2(int signo)
 	if (signo == SIGINT)
 	{
 		ft_putendl_fd("", 1);
-		g_retcmd = 1;
+		g_retcmd = 128 + signo;
 	}
 	if (signo == SIGQUIT)
 	{

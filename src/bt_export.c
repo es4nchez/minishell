@@ -24,8 +24,8 @@ int	bt_export(char ***envp, t_list *args, t_input *input)
 	if (ft_strlen(input->lineread) == 6)
 		sort_env(*envp);
 	else if (!export_errors(args->content))
-		exit(printf("mishellout: export: '%s': not a valid identifier\n",
-				(char *)args->content));
+		exit(ft_strerror("mishellout: export: ", (char *)args->content,
+			": not a valid identifier\n"));
 	else
 	{
 		while (args)

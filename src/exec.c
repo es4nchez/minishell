@@ -55,8 +55,7 @@ void	child_process(t_input *input, char ***envp, t_lstcmd *cmds)
 		exec_redirect(check_redirect(cmds->redis), cmds->redis, input);
 	if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
 		pipe_r(input);
-	if (cmds->next)
-		builtins(input, cmds, envp);
+	builtins(input, cmds, envp);
 }
 
 int	exec_process(t_input *input, char ***envp, t_lstcmd *cmds)
