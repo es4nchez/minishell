@@ -86,14 +86,8 @@ t_lstcmd	*ft_pars_cmd(char **str, char **envp)
 		skip_space(str);
 		while (**str && **str != '|')
 		{
-			cmd->args = ft_pars_arg(str, envp);
-			if (cmd->args)
-				cmd->arg_init = 1;
-			skip_space(str);
-			cmd->redis = ft_pars_redi(str, envp);
-			if (cmd->redis)
-				cmd->redi_init = 1;
-			skip_space(str);
+			cmd_arg(cmd, str, 0, envp);
+			cmd_arg(cmd, str, 1, envp);
 		}
 		string_clean(&(cmd->cmd), envp);
 		return (cmd);
