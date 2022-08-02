@@ -28,15 +28,16 @@ int	bt_exit(t_input *input, t_list *args, int arg_init)
 	if (arg_init == 0)
 		exit_process(input, 0);
 	while (args->content && ((char *)args->content)[++i])
+	{
 		if (!ft_isdigit(((char *)args->content)[i]))
 		{
 			ft_strerror("mishellout: exit: numeric argument required\n", NULL);
 			exit_process(input, 255);
 		}
+	}
 	if (args->next)
 	{
-		printf("exit\n");
-		g_retcmd = ft_strerror("mishellout: exit: too many argument\n", NULL);
+		g_retcmd = ft_strerror("exit\nmishellout: exit: too many argument\n", 0);
 		return (1);
 	}
 	n = ft_atoi((char *)args->content);
