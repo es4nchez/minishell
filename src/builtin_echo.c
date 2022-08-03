@@ -18,19 +18,16 @@ int	get_option(t_list **lst, char c)
 	int	i;
 
 	ret = 0;
-	while (*lst && (*lst)->content)
+	while (*lst && (*lst)->content && *(char *)(*lst)->content == '-')
 	{
-		if (*(char *)(*lst)->content == '-')
+		i = 1;
+		while (((char *)(*lst)->content)[i])
 		{
-			i = 1;
-			while (((char *)(*lst)->content)[i])
-			{
-				if (((char *)(*lst)->content)[i] == c)
-					ret = 1;
-				else
-					return (ret);
-				i++;
-			}
+			if (((char *)(*lst)->content)[i] == c)
+				ret = 1;
+			else
+				return (ret);
+			i++;
 		}
 		*lst = (*lst)->next;
 	}

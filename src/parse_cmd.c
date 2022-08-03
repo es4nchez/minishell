@@ -12,6 +12,15 @@
 
 #include "minishell.h"
 
+void	rm_null(t_lstredi **redis)
+{
+	t_lstredi	*tmp;
+
+	tmp = (*redis)->next;
+	ft_redis_delone(*redis, free);
+	(*redis) = tmp;
+}
+
 void	cmd_arg(t_lstcmd *cmds, char **str, int type, char **envp)
 {
 	if (type == 0)
@@ -23,7 +32,7 @@ void	cmd_arg(t_lstcmd *cmds, char **str, int type, char **envp)
 	}
 	else if (type == 1)
 	{
-		cmds->redis = ft_pars_redi(str, envp);
+		cmds->redis = ft_pars_redi(str, envp, cmds->redis);
 		if (cmds->redis)
 			cmds->redi_init = 1;
 		skip_space(str);

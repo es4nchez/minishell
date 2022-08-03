@@ -124,8 +124,10 @@ int				ft_strerror(char *str, ...);
 void			child_process(t_input *input, char ***envp, t_lstcmd *cmds);
 void			builtins(t_input *input, t_lstcmd *cmds, char ***envp);
 void			cmd_arg(t_lstcmd *cmds, char **str, int type, char **envp);
-t_lstredi		*ft_pars_redi(char **str, char **envp);
+t_lstredi		*ft_pars_redi(char **str, char **envp, t_lstredi *old_redis);
 t_list			*ft_pars_arg(char **str, char **envp);
 void			free_envp(char **envp);
+void			rm_null(t_lstredi **redis);
+void			ft_redis_delone(t_lstredi *lst, void (*del)(void *));
 
 #endif

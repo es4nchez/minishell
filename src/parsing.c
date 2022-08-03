@@ -33,14 +33,14 @@ t_list	*ft_pars_arg(char **str, char **envp)
 	return (ret);
 }
 
-t_lstredi	*ft_pars_redi(char **str, char **envp)
+t_lstredi	*ft_pars_redi(char **str, char **envp, t_lstredi *old_redis)
 {
 	t_lstredi	*redis;
-	t_lstredi	*tmp;
 	char		*redi;
 	char		*file;
 
-	redis = ft_redi_new(NULL, NULL);
+	if (old_redis != NULL)
+		redis = old_redis;
 	skip_space(str);
 	while (**str && ft_isinset(**str, "<>"))
 	{
@@ -51,9 +51,6 @@ t_lstredi	*ft_pars_redi(char **str, char **envp)
 		ft_redis_add_back(&redis, ft_redi_new(redi, file));
 		skip_space(str);
 	}
-	tmp = redis->next;
-	free(redis);
-	redis = tmp;
 	return (redis);
 }
 
@@ -64,6 +61,8 @@ t_lstcmd	*init_cmd(void)
 	cmd = malloc(sizeof(t_lstcmd));
 	if (!cmd)
 		return (NULL);
+	cmd->redis = ft_redi_new(NULL, NULL);
+	cmd->args = NULL;
 	cmd->redi_init = 0;
 	cmd->arg_init = 0;
 	cmd->next = NULL;
@@ -78,6 +77,7 @@ t_lstcmd	*ft_pars_cmd(char **str, char **envp)
 	if (**str == '\0')
 		return (NULL);
 	cmd = init_cmd();
+	cmd_arg(cmd, str, 1, envp);
 	if (**str == '|')
 		cmd->cmd = sep(str, **str, "|");
 	else
@@ -90,6 +90,7 @@ t_lstcmd	*ft_pars_cmd(char **str, char **envp)
 			cmd_arg(cmd, str, 1, envp);
 		}
 		string_clean(&(cmd->cmd), envp);
+		rm_null(&cmd->redis);
 		return (cmd);
 	}
 	return (cmd);
