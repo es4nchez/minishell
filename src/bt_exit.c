@@ -12,13 +12,13 @@
 
 #include "minishell.h"
 
-void	exit_process(t_input *input, int ret)
+void	exit_process(t_input *input, int ret, char **envp)
 {
 	write(1, "exit\n", 5);
-	free_input(input, ret);
+	free_input(input, ret, envp);
 }
 
-int	bt_exit(t_input *input, t_list *args, int arg_init)
+int	bt_exit(t_input *input, t_list *args, int arg_init, char **envp)
 {
 	int	n;
 	int	i;
@@ -26,13 +26,13 @@ int	bt_exit(t_input *input, t_list *args, int arg_init)
 	n = 0;
 	i = -1;
 	if (arg_init == 0)
-		exit_process(input, 0);
+		exit_process(input, 0, envp);
 	while (args->content && ((char *)args->content)[++i])
 	{
 		if (!ft_isdigit(((char *)args->content)[i]))
 		{
 			ft_strerror("mishellout: exit: numeric argument required\n", NULL);
-			exit_process(input, 255);
+			exit_process(input, 255, envp);
 		}
 	}
 	if (args->next)
@@ -42,6 +42,6 @@ int	bt_exit(t_input *input, t_list *args, int arg_init)
 		return (1);
 	}
 	n = ft_atoi((char *)args->content);
-	exit_process(input, n % 256);
+	exit_process(input, n % 256, envp);
 	return (1);
 }

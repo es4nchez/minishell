@@ -12,6 +12,6 @@
 
 void	skip_space(char **str)
 {
-	while (**str && **str == ' ')
+	while (**str && (**str == ' ' || **str == '\t'))
 		(*str)++;
 }

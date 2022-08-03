@@ -36,9 +36,9 @@ void	cd_home(char ***envp)
 	return ;
 }
 
-int	bt_cd(char ***envp, t_list *args, t_input *input)
+int	bt_cd(char ***envp, t_list *args, t_lstcmd *cmds)
 {
-	if (ft_strlen(input->lineread) == 2)
+	if (!cmds->arg_init)
 	{
 		cd_home(envp);
 		return (1);
