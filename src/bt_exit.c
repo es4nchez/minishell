@@ -28,11 +28,13 @@ int	bt_exit(t_input *input, t_list *args, int arg_init)
 	if (arg_init == 0)
 		exit_process(input, 0);
 	while (args->content && ((char *)args->content)[++i])
+	{
 		if (!ft_isdigit(((char *)args->content)[i]))
 		{
 			ft_strerror("mishellout: exit: numeric argument required\n", NULL);
 			exit_process(input, 255);
 		}
+	}
 	if (args->next)
 	{
 		printf("exit\n");
@@ -40,8 +42,6 @@ int	bt_exit(t_input *input, t_list *args, int arg_init)
 		return (1);
 	}
 	n = ft_atoi((char *)args->content);
-	if (n > 255)
-		exit_process(input, n % 256);
-	exit_process(input, n);
+	exit_process(input, n % 256);
 	return (1);
 }
