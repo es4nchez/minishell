@@ -71,7 +71,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		input->lineread = take_input();
 		if (input->lineread == NULL)
-			free_input(input, 1);
+			free_input(input, 1, env);
 		ft_process(input, ft_strdup(input->lineread), env);
 		if (input->cmds)
 			add_history(input->lineread);
@@ -81,6 +81,8 @@ int	main(int argc, char **argv, char **envp)
 			execution(input, &env);
 		if (input->lineread)
 			ft_cmdclear(&(input->cmds), free);
+		free(input->lineread);
 	}
+	free_envp(env);
 	return (0);
 }

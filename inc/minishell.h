@@ -73,11 +73,12 @@ void			execve_threading(t_lstcmd *cmd, char **envp);
 void			print_env(char **envp);
 void			export_env(char ***envp, char *input);
 void			unset_env(char ***envp, char *input);
-void			free_input(t_input *input, int ret);
-int				bt_exit(t_input *input, t_list *args, int arg_init);
+void			free_input(t_input *input, int ret, char **envp);
+int				bt_exit(t_input *input, t_list *args, int arg_init,
+					char **envp);
 void			bt_env(char **envp);
 void			bt_env_sorted(char **envp);
-int				bt_cd(char ***envp, t_list *args, t_input *input);
+int				bt_cd(char ***envp, t_list *args, t_lstcmd *cmds);
 void			bt_input(t_input *input);
 void			bt_echo(t_lstcmd *cmds);
 void			bt_pwd(char **envp);
@@ -125,5 +126,6 @@ void			builtins(t_input *input, t_lstcmd *cmds, char ***envp);
 void			cmd_arg(t_lstcmd *cmds, char **str, int type, char **envp);
 t_lstredi		*ft_pars_redi(char **str, char **envp);
 t_list			*ft_pars_arg(char **str, char **envp);
+void			free_envp(char **envp);
 
 #endif

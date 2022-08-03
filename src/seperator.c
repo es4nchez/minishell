@@ -90,15 +90,15 @@ void	string_clean(char **s, char **envp)
 {
 	int		i;
 
-	i = -1;
+	i = 0;
 	if (!*s)
 		return ;
-	while ((*s)[++i])
+	while ((*s)[i])
 	{
+		++i;
 		if (!ft_strrchr(&(*s)[i], '"') && (*s)[i] == '\'')
 			while ((*s)[++i] != '\0' && (*s)[i] != '\'')
-				if ((*s)[++i] == '\0')
-					break ;
+				;
 		if ((*s)[i] == '$')
 		{
 			dol_swap(s, envp);
