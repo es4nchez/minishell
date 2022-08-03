@@ -19,9 +19,9 @@ int	export_errors(char *input)
 	return (1);
 }
 
-int	bt_export(char ***envp, t_list *args, t_input *input)
+int	bt_export(char ***envp, t_list *args, t_lstcmd *cmds)
 {
-	if (ft_strlen(input->lineread) == 6)
+	if (!cmds->arg_init)
 		sort_env(*envp);
 	else if (!export_errors(args->content))
 		exit(ft_strerror("mishellout: export: ", (char *)args->content,

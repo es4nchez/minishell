@@ -95,7 +95,6 @@ void	string_clean(char **s, char **envp)
 		return ;
 	while ((*s)[i])
 	{
-		++i;
 		if (!ft_strrchr(&(*s)[i], '"') && (*s)[i] == '\'')
 			while ((*s)[++i] != '\0' && (*s)[i] != '\'')
 				;
@@ -108,6 +107,7 @@ void	string_clean(char **s, char **envp)
 		if ((*s)[i] == '\"')
 			if (ft_strchr(&(*s)[i], '$'))
 				dol_swap(s, envp);
+		++i;
 	}
 	*s = rm_quote(*s);
 }

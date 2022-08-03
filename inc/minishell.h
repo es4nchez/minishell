@@ -82,7 +82,7 @@ int				bt_cd(char ***envp, t_list *args, t_lstcmd *cmds);
 void			bt_input(t_input *input);
 void			bt_echo(t_lstcmd *cmds);
 void			bt_pwd(char **envp);
-int				bt_export(char ***envp, t_list *args, t_input *input);
+int				bt_export(char ***envp, t_list *args, t_lstcmd *cmds);
 int				bt_unset(char ***envp, t_list *args, int arg_init);
 char			*trim_equal(char *input, int part);
 char			*dol_parse(char *str, char **envp);

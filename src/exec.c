@@ -41,7 +41,7 @@ void	builtins(t_input *input, t_lstcmd *cmds, char ***envp)
 	else if (!ft_strncmp(cmds->cmd, "env", 4))
 		bt_env(*envp);
 	else if (!ft_strncmp(cmds->cmd, "export", 7))
-		bt_export(envp, cmds->args, input);
+		bt_export(envp, cmds->args, cmds);
 	else if (!ft_strncmp(cmds->cmd, "unset", 6))
 		bt_unset(envp, cmds->args, cmds->arg_init);
 	else
@@ -68,7 +68,7 @@ int	bt_no_fork(t_input *input, t_lstcmd *cmds, char ***envp)
 	else if (!ft_strncmp(cmds->cmd, "exit", 5))
 		return (bt_exit(input, cmds->args, cmds->arg_init, *envp));
 	else if (!ft_strncmp(cmds->cmd, "export", 7) && cmds->arg_init)
-		return (bt_export(envp, cmds->args, input));
+		return (bt_export(envp, cmds->args, cmds));
 	else if (!ft_strncmp(cmds->cmd, "unset", 6))
 		return (bt_unset(envp, cmds->args, cmds->arg_init));
 	return (0);
