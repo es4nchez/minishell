@@ -34,8 +34,15 @@ SRCS		= $(addprefix $(SRCDIR), $(SRCNAMES))
 # command + OBJ
 RM		= rm -rf
 MKDIR	= mkdir -p
-MAKE	= make -C
+MAKE	= make --no-print-directory -C
 OBJS	= $(addprefix $(BUILDDIR), $(SRCNAMES:.c=.o))
+
+# Color
+_COLOR		= \033[32m
+_BOLDCOLOR	= \033[32;1m
+_RESET		= \033[0m
+_CLEAR		= \033[0K\r\c
+_OK			= [\033[32mOK\033[0m]
 
 # Action
 
@@ -55,20 +62,23 @@ $(BUILDDIR):
 			@mkdir -p $(BUILDDIR)
 
 $(BUILDDIR)%.o:$(SRCDIR)%.c $(DEBUG_FILE)
-			$(CC) $(CFLAGS) $(HEADS) -o $@ -c $<
+			@echo "[..] $(NAME)... compiling $*.c\r\c"
+			@$(CC) $(CFLAGS) $(HEADS) -o $@ -c $<
+			@echo "$(_CLEAR)"
 
 $(LIBFT):
-			$(MAKE) $(LIBFTDIR) bonus
+			@$(MAKE) $(LIBFTDIR) bonus
 
 $(NAME): $(BUILDDIR) $(LIBFT) $(OBJS) $(DEBUG_FILE)
-			$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBFT) $(LIBS)
+			@$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBFT) $(LIBS)
+			@echo "$(_OK) $(NAME) compiled"
 clean:
-			rm -rf $(BUILDDIR)
-			$(MAKE) $(LIBFTDIR) clean
+			@rm -rf $(BUILDDIR)
+			@$(MAKE) $(LIBFTDIR) clean
 
 fclean: clean
-			$(MAKE) $(LIBFTDIR) fclean
-			rm -f $(NAME)
+			@$(MAKE) $(LIBFTDIR) fclean
+			@rm -f $(NAME)
 
 debug: CFLAGS += $(CDEBUG)
 debug: isdebug $(NAME)

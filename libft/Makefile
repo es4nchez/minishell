@@ -70,23 +70,34 @@ BONUS			=	ft_lstadd_back.c ft_lstadd_front.c ft_lstclear.c \
 					ft_lstmap.c ft_lstnew.c ft_lstsize.c
 BONUS_OBJS		= $(BONUS:.c=.o)
 
+
+# Color
+_COLOR		= \033[32m
+_BOLDCOLOR	= \033[32;1m
+_RESET		= \033[0m
+_CLEAR		= \033[0K\r\c
+_OK			= [\033[32mOK\033[0m]
+
 # build
 all 	: 	${NAME}
 
 %.o 	: 	%.c
-				${CC} ${CFLAGS} -c ${HEADER} $< -o ${<:.c=.o}
+				@echo "[..] $(NAME)... compiling $*.c\r\c"
+				@${CC} ${CFLAGS} -c ${HEADER} $< -o ${<:.c=.o}
+				@echo "$(_CLEAR)"
 
 ${NAME} : 	${OBJS}
-				ar -rcs $@ $^
+				@ar -rcs $@ $^
 
 clean 	:
-				${RM} ${OBJS} $(BONUS_OBJS)
+				@${RM} ${OBJS} $(BONUS_OBJS)
 
 fclean 	: 	clean
-				${RM} ${NAME}
+				@${RM} ${NAME}
 
 re 		: 	fclean all
 bonus:		$(OBJS) $(BONUS_OBJS)
-				ar rcs $(NAME) $(OBJS) $(BONUS_OBJS)
+				@ar rcs $(NAME) $(OBJS) $(BONUS_OBJS)
+				@echo "$(_OK) $(NAME) compiled"
 
 .PHONY 	: 	all clean fclean re bonus

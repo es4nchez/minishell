@@ -39,6 +39,8 @@ int	heredoc(t_lstredi *redis)
 {
 	int	fd_io[2];
 
+	signal(SIGINT, handle_ctrl);
+	signal(SIGQUIT, handle_ctrl);
 	if (pipe(fd_io))
 	{
 		perror("minishell: pipe: ");
