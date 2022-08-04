@@ -129,5 +129,6 @@ t_list			*ft_pars_arg(char **str, char **envp);
 void			free_envp(char **envp);
 void			rm_null(t_lstredi **redis);
 void			ft_redis_delone(t_lstredi *lst, void (*del)(void *));
+void			handle_herdoc(int signo);
 
 #endif

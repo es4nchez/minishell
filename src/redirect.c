@@ -39,8 +39,8 @@ int	heredoc(t_lstredi *redis)
 {
 	int	fd_io[2];
 
-	signal(SIGINT, handle_ctrl);
-	signal(SIGQUIT, handle_ctrl);
+	signal(SIGQUIT, handle_herdoc);
+	signal(SIGINT, handle_herdoc);
 	if (pipe(fd_io))
 	{
 		perror("minishell: pipe: ");
@@ -96,7 +96,7 @@ int	fd_process(int redi, t_lstredi *redis, int out)
 		fd = heredoc(redis);
 		dup2(fd_temp, STDOUT_FILENO);
 		if (dup2(fd, STDIN_FILENO) == -1)
-			return (1);
+			return (2);
 		close(fd);
 	}
 	else if ((redi == 3 || redi == 4) && redis)

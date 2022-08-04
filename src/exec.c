@@ -52,10 +52,16 @@ void	builtins(t_input *input, t_lstcmd *cmds, char ***envp)
 int	exec_process(t_input *input, char ***envp, t_lstcmd *cmds)
 {
 	if (cmds->pid == 0)
+	{
+		signal(SIGINT, handle_herdoc);
 		child_process(input, envp, cmds);
+	}
 	else
+	{
+		signal(SIGQUIT, handle_herdoc);
 		if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
 			pipe_w(input);
+	}
 	return (0);
 }
 

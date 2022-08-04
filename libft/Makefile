@@ -61,7 +61,9 @@ SRCS			=	ft_isalpha.c\
 					ft_striteri.c\
 					ft_realloc.c\
 					ft_isinset.c\
+					ft_isspace.c\
 					skip_space.c\
+					
 
 OBJS			= $(SRCS:.c=.o)
 

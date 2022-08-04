@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   skip_space.c                                       :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*   By: yalthaus <yalthaus@student.42Lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/22 15:03:32 by yalthaus          #+#    #+#             */
-/*   Updated: 2022/07/22 15:03:45 by yalthaus         ###   ########.fr       */
+/*   Created: 2021/10/08 19:49:52 by yalthaus          #+#    #+#             */
+/*   Updated: 2021/12/06 09:17:21 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	skip_space(char **str)
+int	ft_isspace(int c)
 {
-	while (**str && ft_isspace(**str))
-		(*str)++;
+	return ((c >= 9 && c <= 13) || c == 32);
 }

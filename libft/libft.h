@@ -60,6 +60,7 @@ void	ft_striteri(char *s, void (*f)(unsigned int, char *));
 void	*ft_realloc(void *ptr, int len);
 int		ft_isinset(char c, char *set);
 void	skip_space(char **str);
+int		ft_isspace(int c);
 
 t_list	*ft_lstnew(void *content);
 void	ft_lstadd_front(t_list **lst, t_list *new);

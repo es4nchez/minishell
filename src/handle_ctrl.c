@@ -23,10 +23,7 @@ void	handle_ctrl(int sig_nb)
 		return ;
 	}
 	else if (sig_nb == SIGQUIT)
-	{
-		rl_on_new_line();
-		rl_redisplay();
-	}
+		return ;
 }
 
 void	handle_signals2(int signo)
@@ -38,8 +35,19 @@ void	handle_signals2(int signo)
 	}
 	if (signo == SIGQUIT)
 	{
-		ft_putendl_fd("", 1);
+		ft_putendl_fd("Quit: 3", 1);
 		rl_on_new_line();
 		g_retcmd = 128 + signo;
 	}
+}
+
+void	handle_herdoc(int signo)
+{
+	if (signo == SIGINT)
+	{
+		exit(128 + signo);
+		g_retcmd = 128 + signo;
+	}
+	if (signo == SIGQUIT)
+		return ;
 }
