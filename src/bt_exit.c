@@ -26,7 +26,7 @@ int	bt_exit(t_input *input, t_list *args, int arg_init, char **envp)
 	n = 0;
 	i = -1;
 	if (arg_init == 0)
-		exit_process(input, 0, envp);
+		exit_process(input, g_retcmd, envp);
 	while (args->content && ((char *)args->content)[++i])
 	{
 		if (!ft_isdigit(((char *)args->content)[i]))
