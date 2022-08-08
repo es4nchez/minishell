@@ -20,10 +20,9 @@ void	handle_ctrl(int sig_nb)
 		ft_putendl_fd("", 1);
 		rl_on_new_line();
 		rl_redisplay();
+		g_retcmd = 1;
 		return ;
 	}
-	else if (sig_nb == SIGQUIT)
-		return ;
 }
 
 void	handle_signals2(int signo)

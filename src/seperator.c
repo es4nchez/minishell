@@ -48,6 +48,33 @@ char	*sep(char **str, char c, char *set)
 	return (ft_substr(temp, 0, *str - temp));
 }
 
+char	*rm_all_quote(char *s)
+{
+	char	*temp;
+	char	quote;
+	char	*rep;
+	int		i;
+	int		j;
+
+	i = 0;
+	while (s[i])
+	{	
+		j = i;
+		while (s[i] && s[i] != '\'' && s[i] != '"')
+			i++;
+		quote = s[i];
+		temp = ft_substr(s, j, i);
+		if (s[i])
+			i++;
+		rep = ft_strjoin(rep, temp);
+		while (s[i] && s[i] != quote)
+			i++;
+		
+	}
+
+	return (rep);
+}
+
 char	*rm_quote(char *s)
 {
 	char	*temp;
@@ -67,7 +94,9 @@ char	*rm_quote(char *s)
 	s = ft_strjoin(temp, ret);
 	free(temp);
 	free(ret);
-	i = ft_strrchr(s, quote) - s;
+	i = ft_strchr(s + i, quote) - s;
+	if (!i)
+		return (s);
 	temp = ft_substr(s, 0, i);
 	ret = ft_substr(s, i + 1, ft_strlen(s + i + 1));
 	free(s);
@@ -93,11 +122,11 @@ void	string_clean(char **s, char **envp)
 	i = 0;
 	if (!*s)
 		return ;
-	while ((*s)[i])
+	while ( i < (int)ft_strlen(*s) && (*s)[i])
 	{
-		if (!ft_strrchr(&(*s)[i], '"') && (*s)[i] == '\'')
-			while ((*s)[++i] != '\0' && (*s)[i] != '\'')
-				;
+		// if (!ft_strrchr(&(*s)[i], '"') && (*s)[i] == '\'')
+		// 	while ((*s)[++i] != '\0' && (*s)[i] != '\'')
+		// 		;
 		if ((*s)[i] == '$')
 		{
 			dol_swap(s, envp);

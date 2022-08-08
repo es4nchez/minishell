@@ -105,6 +105,6 @@ void	execution(t_input *input, char ***envp)
 	}
 	ft_waitpid(input->cmds);
 	signal(SIGINT, handle_ctrl);
-	signal(SIGQUIT, handle_ctrl);
+	signal(SIGQUIT, SIG_IGN);
 	reset_std(input);
 }

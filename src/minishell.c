@@ -50,7 +50,7 @@ int	init_shell(t_input **input, char **argv, int argc)
 {
 	(void)argv;
 	(void)argc;
-	signal(SIGQUIT, handle_ctrl);
+	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, handle_ctrl);
 	ft_set_termios();
 	init_input(input);
@@ -66,12 +66,12 @@ int	main(int argc, char **argv, char **envp)
 
 	env = env_dup(envp);
 	if (init_shell(&input, argv, argc))
-		return (0);
+		return (1);
 	while (1)
 	{
 		input->lineread = take_input();
 		if (input->lineread == NULL)
-			free_input(input, 1, env);
+			free_input(input, g_retcmd, env);
 		ft_process(input, ft_strdup(input->lineread), env);
 		if (input->cmds)
 			add_history(input->lineread);
