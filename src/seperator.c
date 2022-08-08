@@ -124,9 +124,9 @@ void	string_clean(char **s, char **envp)
 		return ;
 	while ( i < (int)ft_strlen(*s) && (*s)[i])
 	{
-		// if (!ft_strrchr(&(*s)[i], '"') && (*s)[i] == '\'')
-		// 	while ((*s)[++i] != '\0' && (*s)[i] != '\'')
-		// 		;
+		if ((*s)[i] == '\'')
+			while ((*s)[++i] != '\0' && (*s)[i] != '\'')
+				;
 		if ((*s)[i] == '$')
 		{
 			dol_swap(s, envp);
