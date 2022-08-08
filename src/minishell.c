@@ -53,6 +53,7 @@ int	init_shell(t_input **input, char **argv, int argc)
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, handle_ctrl);
 	ft_set_termios();
+	g_retcmd = 1;
 	init_input(input);
 	if (!*input)
 		return (1);
