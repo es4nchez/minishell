@@ -12,9 +12,12 @@
 
 #include "minishell.h"
 
-void	*ft_free(void *ptr)
+void	*ft_free(void *ptr, void *ptr2)
 {
-	free(ptr);
+	if (ptr)
+		free(ptr);
+	if (ptr2)
+		free(ptr2);
 	return (NULL);
 }
 
