@@ -12,25 +12,38 @@
 
 #include "minishell.h"
 
+int	is_fulln(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[0] != '-')
+		return (0);
+	i++;
+	while (str[i] && str[i] == 'n')
+		i++;
+	if (str[i] == 0 && i > 1)
+		return (1);
+	return (0);
+}
+
 int	get_option(t_list **lst, char c)
 {
 	int	ret;
 	int	i;
 
 	ret = 0;
-	while (*lst && (*lst)->content && *(char *)(*lst)->content == '-')
+	i = 1;
+	while (((char *)(*lst)->content)[i] && *(char *)(*lst)->content == '-')
 	{
-		i = 1;
-		while (((char *)(*lst)->content)[i])
-		{
-			if (((char *)(*lst)->content)[i] == c)
-				ret = 1;
-			else
-				return (ret);
-			i++;
-		}
-		*lst = (*lst)->next;
+		if (((char *)(*lst)->content)[i] == c)
+			ret = 1;
+		else
+			ret = 0;
+		i++;
 	}
+	while (*lst && ret == 1 && is_fulln((char *)(*lst)->content))
+		(*lst) = (*lst)->next;
 	return (ret);
 }
 
