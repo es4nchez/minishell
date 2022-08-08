@@ -119,7 +119,7 @@ void			sort_env(char **envp);
 char			**env_dup(char **envp);
 int				env_size(char **envp);
 int				init_signal(int n);
-void			*ft_free(void *ptr);
+void			*ft_free(void *ptr, void *ptr2);
 int				ft_strerror(char *str, ...);
 void			child_process(t_input *input, char ***envp, t_lstcmd *cmds);
 void			builtins(t_input *input, t_lstcmd *cmds, char ***envp);
