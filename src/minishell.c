@@ -71,7 +71,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		input->lineread = take_input();
 		if (input->lineread == NULL)
-			free_input(input, g_retcmd, env);
+			bt_exit(input, NULL, 0, env);
 		ft_process(input, ft_strdup(input->lineread), env);
 		if (input->cmds)
 			add_history(input->lineread);
