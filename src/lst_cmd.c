@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lst_cmd.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/22 14:31:43 by yalthaus          #+#    #+#             */
+/*   Updated: 2022/07/22 14:32:03 by yalthaus         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_lstcmd	*ft_cmdnew(char *cmd, t_list *args)
@@ -9,7 +21,7 @@ t_lstcmd	*ft_cmdnew(char *cmd, t_list *args)
 		return (NULL);
 	element->cmd = cmd;
 	element->next = NULL;
-    element->args = args;
+	element->args = args;
 	return (element);
 }
 
@@ -39,8 +51,16 @@ void	ft_cmdclear(t_lstcmd **lst, void (*del)(void *))
 		while (*lst)
 		{
 			tmp = (*lst)->next;
-            ft_lstclear(&((*lst)->args), free);
-            free((*lst)->args);
+			if ((*lst)->arg_init)
+			{
+				ft_lstclear(&((*lst)->args), free);
+				free((*lst)->args);
+			}
+			if ((*lst)->redi_init)
+			{
+				ft_redis_clear(&((*lst)->redis), free);
+				free((*lst)->redis);
+			}
 			ft_cmddelone(*lst, del);
 			(*lst) = tmp;
 		}

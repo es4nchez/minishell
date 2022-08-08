@@ -12,46 +12,76 @@
 
 #include "minishell.h"
 
-char	*trim_equal(char *input)
+char	*trim_equal(char *input, int part)
 {
 	int	i;
 
 	i = 0;
+	if (!input)
+		return (NULL);
 	while (input[i] != '=' && input[i])
 	{
 		i++;
 	}
-	return (ft_substr(input, 0, i));
+	if (!part)
+		return (ft_substr(input, 0, i));
+	if (!input[i])
+		return (ft_calloc(1, 1));
+	return (ft_substr(input, i + 1, ft_strlen(input)));
 }
 
-void	unset_env(char ***envp, char *input)
+int	rm_env(char ***envp, int n)
 {
-	int	i;
+	int		i;
+	int		len;
 
 	i = 0;
-	while (ft_strncmp(envp[0][i], trim_equal(input), ft_strlen(input)) != 0 && envp[0][i])
-	{
+	if ((*envp)[n] == NULL)
+		return (1);
+	while ((*envp)[i])
 		i++;
-	}
-	while (envp[0][i])
+	len = i;
+	free((*envp)[n]);
+	*envp = ft_realloc(*envp, (len + 1) * sizeof(char *));
+	if (!envp)
+		return (1);
+	i = -1;
+	while ((*envp)[n])
 	{
-		envp[0][i] = envp[0][i + 1];
-		i++;
+		(*envp)[n] = (*envp)[n + 1];
+		n++;
 	}
-	envp[0][i] = NULL;
-	return ;
+	(*envp)[len - 1] = NULL;
+	return (0);
 }
 
-void	export_env(char ***envp, char *input)
+int	set_env(char ***envp, char *var, char *content)
 {
-	int	i;
+	int		i;
+	char	*tmp;
 
 	i = 0;
-	while (envp[0][i])
+	if (!envp || !var)
+		return (1);
+	while ((*envp)[i] && ft_strncmp((*envp)[i], var,
+		len_equal((*envp)[i])) != 0)
 		i++;
-	envp[0][i] = input;
-	envp[0][i + 1] = NULL;
-	return ;
+	if (content == NULL)
+		return (rm_env(envp, i));
+	if ((*envp)[i] == NULL)
+		*envp = ft_realloc(*envp, (i + 2) * sizeof(char *));
+	if (content[0] == '\0')
+		tmp = ft_strdup(var);
+	else
+		tmp = ft_strjoin(var, "=");
+	free(var);
+	var = ft_strjoin(tmp, content);
+	free(tmp);
+	free(content);
+	if ((*envp)[i])
+		free((*envp)[i]);
+	(*envp)[i] = var;
+	return (0);
 }
 
 void	print_env(char **envp)
@@ -61,7 +91,8 @@ void	print_env(char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		printf("\e[33m%s\e[0m\n", envp[i]);
+		if (ft_strchr(envp[i], '='))
+			printf("\e[33m%s\e[0m\n", envp[i]);
 		i++;
 	}
 	return ;

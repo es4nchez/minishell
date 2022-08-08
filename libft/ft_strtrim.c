@@ -6,18 +6,11 @@
 /*   By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 17:06:28 by yalthaus          #+#    #+#             */
-/*   Updated: 2021/10/14 22:24:40 by yalthaus         ###   ########.fr       */
+/*   Updated: 2022/07/22 15:09:03 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-static int	ft_isinset(char c, char *set)
-{
-	while (*set && c != *set)
-		set++;
-	return (*set);
-}
 
 char	*ft_strtrim(char const *s1, char const *set)
 {

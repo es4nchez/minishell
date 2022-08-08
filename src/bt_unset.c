@@ -6,29 +6,25 @@
 /*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 14:18:10 by esanchez          #+#    #+#             */
-/*   Updated: 2022/03/31 14:18:12 by esanchez         ###   ########.fr       */
+/*   Updated: 2022/07/26 13:43:23 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	bt_unset(char **envp, char *arg)
+int	bt_unset(char ***envp, t_list *args, int args_init)
 {
-	char	*env_arg;
-	int		i;
+	char	*var;
 
-	i = 0;
-	if (!ft_split(arg, ' ')[1])
-		return ;
-	env_arg = ft_split(ft_split(arg, ' ')[1], '=')[0];
-	while (envp[i] != NULL)
+	if (!args_init)
+		return (ft_strerror("unset: not enough arguments\n", NULL));
+	while (args)
 	{
-		if (ft_strncmp(envp[i], env_arg, ft_strlen(env_arg)) == 0)
-		{
-			envp[i] = envp[i + 1];
-			return ;
-		}
-		i++;
+		var = trim_equal(args->content, 0);
+		set_env(envp, var, NULL);
+		if (var)
+			free(var);
+		args = args->next;
 	}
-	return ;
+	return (1);
 }

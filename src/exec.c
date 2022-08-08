@@ -6,54 +6,108 @@
 /*   By: esanchez <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 19:53:22 by esanchez          #+#    #+#             */
-/*   Updated: 2022/01/24 19:53:24 by esanchez         ###   ########.fr       */
+/*   Updated: 2022/07/26 13:43:57 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	builtins(t_input *input, char **envp)
+void	ft_waitpid(t_lstcmd *cmds)
 {
-	// char	**cmd;
-	// char	*final_cmd;
+	int	ret;
 
-	// t_lstcmd	*lst;
+	while (cmds)
+	{
+		if (cmds->pid != 0)
+			waitpid(cmds->pid, &ret, 0);
+		cmds = cmds->next;
+		if (WIFEXITED(ret))
+			g_retcmd = WEXITSTATUS(ret);
+	}
+}
 
-	// (void)envp;
-	// lst = input->cmds->next;
-	// while (lst)
-	// {
-	// 	printf("CMD:\t%s\n", lst->cmd);
-	// 	while (lst->args)
-	// 	{
-	// 		printf("ARG:\t\t%s\n", (char *)lst->args->content);
-	// 		lst->args = lst->args->next;
-	// 	}
-	// 	lst = lst->next;
-	// }
-	//printf("%p\n", input);
+void	builtins(t_input *input, t_lstcmd *cmds, char ***envp)
+{
+	if (!cmds || !cmds->cmd)
+		return ;
+	if (!ft_strncmp(cmds->cmd, "echo", 5) && ft_strlen(cmds->cmd) == 4)
+		bt_echo(cmds);
+	else if (!ft_strncmp(cmds->cmd, "cd", 3))
+		bt_cd(envp, cmds->args, cmds);
+	else if (!ft_strncmp(cmds->cmd, "exit", 5))
+		bt_exit(input, cmds->args, cmds->arg_init, *envp);
+	else if (!ft_strncmp(cmds->cmd, "pwd", 4) && ft_strlen(cmds->cmd) == 3)
+		bt_pwd(*envp);
+	else if (!ft_strncmp(cmds->cmd, "env", 4))
+		bt_env(*envp);
+	else if (!ft_strncmp(cmds->cmd, "export", 7))
+		bt_export(envp, cmds->args, cmds);
+	else if (!ft_strncmp(cmds->cmd, "unset", 6))
+		bt_unset(envp, cmds->args, cmds->arg_init);
+	else
+		execve_threading(cmds, envp);
+	exit(0);
+}
 
-	if (!ft_strncmp(input->cmds->cmd, "echo", 4))
-		bt_echo(input->cmds);
-	// cmd = ft_split(input, ' ');
-	// final_cmd = ft_strjoin("/bin/", cmd[0]);
-	else if (ft_strncmp(input->cmds->cmd, "cd", 2) == 0)
-	 	bt_cd(envp, ft_split(input->lineread, ' ')[1]);
-	else if (ft_strncmp(input->cmds->cmd, "exit", 4) == 0)
-		bt_exit(input);
-	else if (ft_strncmp(input->cmds->cmd, "pwd", 3) == 0)
-		bt_pwd(envp);
-	// else if (ft_strncmp(input, "echo -n", 7) == 0)
-	// 	printf("%s\e[7m%%\e[0m\n", ft_substr(input, 8, ft_strlen(input)));
-	// else if (ft_strncmp(input, "echo", 4) == 0 )
-	// 	bt_echo();
-	else if (ft_strncmp(input->cmds->cmd, "env", 3) == 0)
-		bt_env(envp);
-	else if (ft_strncmp(input->cmds->cmd, "export", 6) == 0)
-	 	bt_export(envp, input->lineread);
-	else if (ft_strncmp(input->cmds->cmd, "unset", 5) == 0)
-		bt_unset(envp, input->lineread);
-	 else
-	 	execve_threading(input->cmds, envp);
-	return ;
+int	exec_process(t_input *input, char ***envp, t_lstcmd *cmds)
+{
+	if (cmds->pid == 0)
+	{
+		signal(SIGINT, handle_herdoc);
+		child_process(input, envp, cmds);
+	}
+	else
+	{
+		if (cmds->redis)
+			signal(SIGQUIT, handle_herdoc);
+		else
+			signal(SIGQUIT, handle_signals2);
+		if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
+			pipe_w(input);
+	}
+	return (0);
+}
+
+int	bt_no_fork(t_input *input, t_lstcmd *cmds, char ***envp)
+{
+	if (!cmds || !cmds->cmd)
+		return (0);
+	else if (!ft_strncmp(cmds->cmd, "cd", 3))
+		return (bt_cd(envp, cmds->args, cmds));
+	else if (!ft_strncmp(cmds->cmd, "exit", 5))
+		return (bt_exit(input, cmds->args, cmds->arg_init, *envp));
+	else if (!ft_strncmp(cmds->cmd, "export", 7) && cmds->arg_init)
+		return (bt_export(envp, cmds->args, cmds));
+	else if (!ft_strncmp(cmds->cmd, "unset", 6))
+		return (bt_unset(envp, cmds->args, cmds->arg_init));
+	return (0);
+}
+
+void	execution(t_input *input, char ***envp)
+{
+	t_lstcmd	*cmds;
+
+	cmds = input->cmds;
+	signal(SIGINT, handle_signals2);
+	signal(SIGQUIT, handle_signals2);
+	while (cmds && cmds->cmd)
+	{
+		if (!cmds->next)
+			if (bt_no_fork(input, cmds, envp))
+				break ;
+		if (cmds->next)
+			if (pipe(input->pipe_fd) == -1)
+				return ;
+		cmds->pid = fork();
+		if (exec_process(input, envp, cmds))
+			break ;
+		if (cmds->next && cmds->next->next)
+			cmds = cmds->next->next;
+		else
+			cmds = NULL;
+	}
+	ft_waitpid(input->cmds);
+	signal(SIGINT, handle_ctrl);
+	signal(SIGQUIT, SIG_IGN);
+	reset_std(input);
 }

@@ -6,7 +6,7 @@
 #    By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/13 01:48:48 by yalthaus          #+#    #+#              #
-#    Updated: 2021/10/16 05:09:58 by yalthaus         ###   ########.fr        #
+#    Updated: 2022/07/22 15:09:52 by yalthaus         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,6 +59,11 @@ SRCS			=	ft_isalpha.c\
 					ft_itoa.c\
 					ft_strmapi.c\
 					ft_striteri.c\
+					ft_realloc.c\
+					ft_isinset.c\
+					ft_isspace.c\
+					skip_space.c\
+					
 
 OBJS			= $(SRCS:.c=.o)
 
@@ -67,23 +72,34 @@ BONUS			=	ft_lstadd_back.c ft_lstadd_front.c ft_lstclear.c \
 					ft_lstmap.c ft_lstnew.c ft_lstsize.c
 BONUS_OBJS		= $(BONUS:.c=.o)
 
+
+# Color
+_COLOR		= \033[32m
+_BOLDCOLOR	= \033[32;1m
+_RESET		= \033[0m
+_CLEAR		= \033[0K\r\c
+_OK			= [\033[32mOK\033[0m]
+
 # build
 all 	: 	${NAME}
 
 %.o 	: 	%.c
-				${CC} ${CFLAGS} -c ${HEADER} $< -o ${<:.c=.o}
+				@echo "[..] $(NAME)... compiling $*.c\r\c"
+				@${CC} ${CFLAGS} -c ${HEADER} $< -o ${<:.c=.o}
+				@echo "$(_CLEAR)"
 
 ${NAME} : 	${OBJS}
-				ar -rcs $@ $^
+				@ar -rcs $@ $^
 
 clean 	:
-				${RM} ${OBJS} $(BONUS_OBJS)
+				@${RM} ${OBJS} $(BONUS_OBJS)
 
 fclean 	: 	clean
-				${RM} ${NAME}
+				@${RM} ${NAME}
 
 re 		: 	fclean all
 bonus:		$(OBJS) $(BONUS_OBJS)
-				ar rcs $(NAME) $(OBJS) $(BONUS_OBJS)
+				@ar rcs $(NAME) $(OBJS) $(BONUS_OBJS)
+				@echo "$(_OK) $(NAME) compiled"
 
 .PHONY 	: 	all clean fclean re bonus

@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/12 10:15:39 by yalthaus          #+#    #+#             */
-/*   Updated: 2022/01/04 09:51:49 by yalthaus         ###   ########.fr       */
+/*   Created: 2021/10/13 04:43:54 by yalthaus          #+#    #+#             */
+/*   Updated: 2021/10/16 05:51:29 by yalthaus         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	*ft_realloc(void *ptr, int len)
+void	ft_putstr_fd(char *s, int fd)
 {
-	char	*ret;
+	int	i;
 
-	ret = malloc(len);
-	if (ret == NULL)
-		return (NULL);
-	if (!ft_memcpy(ret, ptr, len - 8))
-		return (NULL);
-	*(ret + len - 8) = 0;
-	free(ptr);
-	return (ret);
+	i = 0;
+	if (!s || !fd)
+		return ;
+	while (*(s + i))
+		ft_putchar_fd(s[i++], fd);
 }

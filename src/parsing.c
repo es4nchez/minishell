@@ -1,154 +1,119 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yalthaus <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/22 12:53:54 by yalthaus          #+#    #+#             */
+/*   Updated: 2022/07/22 15:18:41 by yalthaus         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-// char    *next_word(char *str)
-// {
-//     char    *s;
-//     int     i;
-
-//     i = 0;
-//     s = ft_strdup(str);
-//     while (*(s + i) != '\0' || *(s + i) != ' ')
-//         i++;
-//     *(s + i) = '\0';
-//     return (s);
-// }
-
-// char    *pars(char *str, char c, pars_func *pt)
-// {
-//     char    *ret;
-
-//     while (*str)
-//     {
-//         if (*str == c)
-//             ret = (*pt)(next_word(str));
-//         str++; 
-//     }
-//     return (ret);
-// }
-
-void    skip_space(char **str)
+t_list	*ft_pars_arg(char **str, char **envp)
 {
-    while (**str && **str == ' ')
-        (*str)++;
+	t_list	*ret;
+	t_list	*tmp;
+	char	*s;
+
+	skip_space(str);
+	ret = ft_lstnew(NULL);
+	while (!ft_isinset(**str, "|<> "))
+	{
+		s = sep(str, **str, "|<> ");
+		string_clean(&s, envp);
+		ft_lstadd_back(&ret, ft_lstnew(s));
+		skip_space(str);
+	}
+	tmp = ret->next;
+	free(ret);
+	ret = tmp;
+	return (ret);
 }
 
-int	ft_isinset(char c, char *set)
+t_lstredi	*ft_pars_redi(char **str, char **envp, t_lstredi *old_redis)
 {
-	while (*set && c != '\0' && c != *set)
-		set++;
-	return (*set);
+	t_lstredi	*redis;
+	char		*redi;
+	char		*file;
+
+	if (old_redis != NULL)
+		redis = old_redis;
+	skip_space(str);
+	while (**str && ft_isinset(**str, "<>"))
+	{
+		redi = sep(str, **str, "<>");
+		skip_space(str);
+		file = sep(str, **str, "|<> ");
+		string_clean(&file, envp);
+		ft_redis_add_back(&redis, ft_redi_new(redi, file));
+		skip_space(str);
+	}
+	return (redis);
 }
 
-void    get_quote(char **str, char copen)
+t_lstcmd	*init_cmd(void)
 {
-    (*str)++;
-    while (**str != '\0' && **str != copen)
-        (*str)++;
-    if (**str == '\0')
-        return ;                              //TODO : error quote non fermee
-}
-
-char    *sep(char **str, char c, char *set)
-{
-    char    *temp;
-
-    temp = *str;
-    while(**str && !ft_isinset(**str, set))
-    {
-        if (**str == '"' || **str == '\'')
-            get_quote(str, **str);
-        (*str)++;
-    }
-    if (ft_isinset(c, "|<>"))
-            (*str)++;
-    return (ft_substr(temp, 0, *str - temp));
-}
-
-char    *rm_quote(char *s)
-{
-    char    *temp;
-
-    temp = ft_substr(s, 1, ft_strlen(s) - 2);
-    free(s);
-    return (temp);
-}
-
-t_list    *ft_pars_arg(char **str, char **envp)
-{
-    t_list  *ret;
-    t_list  *tmp;
-    char    *temp;
-    char    *s;
-
-    skip_space(str);
-    ret = ft_lstnew(NULL);
-    while(!ft_isinset(**str, "|<> "))
-    {
-        s = sep(str, **str, "|<> ");
-        if (ft_strchr(s,'$') && s[0] != '\'')
-        {
-            temp = dol_parse(s, envp);
-            free(s);
-            s = temp;
-        }
-        if (s && (s[0] == '\'' || s[0] == '"'))
-            s = rm_quote(s);
-        ft_lstadd_back(&ret, ft_lstnew(s));
-        skip_space(str);
-    }
-    tmp = ret->next;
-    free(ret);
-    ret = tmp;
-    return (ret);
-}
-
-t_lstcmd    *ft_pars_cmd(char **str, char **envp)
-{
-    t_lstcmd    *cmd;
-    char    *temp;
+	t_lstcmd	*cmd;
 
 	cmd = malloc(sizeof(t_lstcmd));
-    skip_space(str);
-    cmd->next = NULL;
-    if (**str == '|')
-        cmd->cmd = sep(str, **str, "|");
-    else if (**str == '<')
-        cmd->cmd = sep(str, **str, "<");
-    else if (**str == '>')
-        cmd->cmd = sep(str, **str, ">");
-    else
-    {
-        cmd->cmd = sep(str, **str, "|>< ");
-        cmd->args = ft_pars_arg(str, envp);
-        if (ft_strchr(cmd->cmd,'$') && cmd->cmd[0] != '\'')
-        {
-            temp = dol_parse(cmd->cmd, envp);
-            free(cmd->cmd);
-            cmd->cmd = temp;
-        }
-        return (cmd);
-    }
-    cmd->args = ft_lstnew(NULL);
-    return (cmd);
+	if (!cmd)
+		return (NULL);
+	cmd->redis = ft_redi_new(NULL, NULL);
+	cmd->args = NULL;
+	cmd->redi_init = 0;
+	cmd->arg_init = 0;
+	cmd->next = NULL;
+	return (cmd);
 }
 
-void    ft_process(t_input *input, char *str, char **envp)
+t_lstcmd	*ft_pars_cmd(char **str, char **envp)
 {
-    char        *tmp;
-    t_lstcmd    *temp;
+	t_lstcmd	*cmd;
 
-    tmp = str;
-    if (!str || !input)
-        return ;
-    input->lstlen = 0;
-    input->cmds = ft_cmdnew(NULL, NULL);
-    while (*str)
-    {
-        ft_cmdadd_back(&(input->cmds), ft_pars_cmd(&str, envp));
-        input->lstlen++;
-    }
-    temp = input->cmds->next;
-    free(input->cmds);
-    input->cmds = temp;
-    free(tmp);
+	skip_space(str);
+	if (**str == '\0')
+		return (NULL);
+	cmd = init_cmd();
+	cmd_arg(cmd, str, 1, envp);
+	if (**str == '|')
+		cmd->cmd = sep(str, **str, "|");
+	else
+	{
+		cmd->cmd = sep(str, **str, "|>< ");
+		skip_space(str);
+		while (**str && **str != '|')
+		{
+			cmd_arg(cmd, str, 0, envp);
+			cmd_arg(cmd, str, 1, envp);
+		}
+		string_clean(&(cmd->cmd), envp);
+		rm_null(&cmd->redis);
+		return (cmd);
+	}
+	return (cmd);
+}
+
+void	ft_process(t_input *input, char *str, char **envp)
+{
+	char		*tmp;
+	t_lstcmd	*temp;
+
+	(void)envp;
+	tmp = str;
+	if (!str || !input)
+		return ;
+	input->lstlen = 0;
+	input->cmds = ft_cmdnew(NULL, NULL);
+	while (*str)
+	{
+		ft_cmdadd_back(&(input->cmds), ft_pars_cmd(&str, envp));
+		input->lstlen++;
+	}
+	temp = input->cmds->next;
+	free(input->cmds);
+	input->cmds = temp;
+	free(tmp);
 }

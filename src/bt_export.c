@@ -12,36 +12,32 @@
 
 #include "minishell.h"
 
-void	change_variable(char **envp, int arg_nb, char *env_arg, char *env_val)
+int	export_errors(char *input)
 {
-	envp[arg_nb] = ft_substr(envp[arg_nb], 0, ft_strlen(env_arg) + 1);
-	envp[arg_nb] = ft_strjoin(envp[arg_nb], env_val);
-	return ;
+	if (!ft_isalpha(input[0]))
+		return (0);
+	return (1);
 }
 
-void	bt_export(char **envp, char *arg)
+int	bt_export(char ***envp, t_list *args, t_lstcmd *cmds)
 {
-	char	*env_arg;
-	char	*env_val;
-	int		i;
-
-	(void)envp;
-	i = 0;
-	if (!ft_split(arg, ' ')[1])
-		return ;
-	env_arg = ft_split(ft_split(arg, ' ')[1], '=')[0];
-	env_val = ft_split(ft_split(arg, ' ')[1], '=')[1];
-	while (envp[i] != NULL)
+	if (!cmds->arg_init)
+		sort_env(*envp);
+	else if (!export_errors(args->content))
+		exit(ft_strerror("mishellout: export: ", (char *)args->content,
+				": not a valid identifier\n"));
+	else
 	{
-		if (ft_strncmp(envp[i], env_arg, ft_strlen(env_arg)) == 0)
+		while (args)
 		{
-			change_variable(envp, i, env_arg, env_val);
-			return ;
+			if (ft_strchr(args->content, '='))
+				set_env(envp, trim_equal(args->content, 0),
+					trim_equal(args->content, 1));
+			else
+				set_env(envp, trim_equal(args->content, 0),
+					trim_equal(args->content, 1));
+			args = args->next;
 		}
-		i++;
 	}
-	envp[i] = ft_strjoin(ft_strjoin(env_arg, "="), env_val);
-	envp[i] = ft_strjoin(ft_strjoin(env_arg, "="), env_val);
-	envp[i + 1] = NULL;
-	return ;
+	return (1);
 }
