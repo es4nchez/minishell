@@ -45,7 +45,7 @@ void	builtins(t_input *input, t_lstcmd *cmds, char ***envp)
 	else if (!ft_strncmp(cmds->cmd, "unset", 6))
 		bt_unset(envp, cmds->args, cmds->arg_init);
 	else
-		execve_threading(cmds, *envp);
+		execve_threading(cmds, envp);
 	exit(0);
 }
 
@@ -58,7 +58,10 @@ int	exec_process(t_input *input, char ***envp, t_lstcmd *cmds)
 	}
 	else
 	{
-		signal(SIGQUIT, handle_herdoc);
+		if (cmds->redis)
+			signal(SIGQUIT, handle_herdoc);
+		else
+			signal(SIGQUIT, handle_signals2);
 		if (cmds->next && !ft_strncmp(cmds->next->cmd, "|", 2))
 			pipe_w(input);
 	}

@@ -47,17 +47,17 @@ char	**execve_arg(t_lstcmd *cmd, char **envp)
 	return (ret);
 }
 
-void	execve_threading(t_lstcmd *cmd, char **envp)
+void	execve_threading(t_lstcmd *cmd, char ***envp)
 {
 	char	**argv;
 
-	argv = execve_arg(cmd, envp);
+	argv = execve_arg(cmd, *envp);
 	if (argv == NULL || argv[0] == NULL)
 	{
 		clear_tab(argv);
 		exit(1);
 	}
-	if (execve(argv[0], argv, envp) == -1)
+	if (execve(argv[0], argv, *envp) == -1)
 		exit(1);
 	clear_tab(argv);
 	return ;

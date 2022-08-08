@@ -76,7 +76,7 @@ char	*get_env(char *str, char **envp)
 		return (ft_itoa(g_retcmd));
 	var = get_var(str);
 	if (!var)
-		return (ft_free(var));
+		return (ft_free(var, NULL));
 	while (envp[i] && (ft_strncmp(envp[i], var, len_equal(envp[i])) != 0
 			|| ft_strncmp(envp[i], var, ft_strlen(var)) != 0))
 		i++;

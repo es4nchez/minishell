@@ -69,7 +69,7 @@ char			*take_input(void);
 void			execution(t_input *input, char ***envp);
 void			handle_ctrl(int sig_nb);
 void			handle_signals2(int sig_nb);
-void			execve_threading(t_lstcmd *cmd, char **envp);
+void			execve_threading(t_lstcmd *cmd, char ***envp);
 void			print_env(char **envp);
 void			export_env(char ***envp, char *input);
 void			unset_env(char ***envp, char *input);
